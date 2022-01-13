@@ -16,20 +16,20 @@
 # For more information on GitHub Actions for Azure: https://github.com/Azure/Actions
 # For more information on the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # For more samples to get started with GitHub Action workflows to deploy to Azure: https://github.com/Azure/actions-workflow-samples
-#Change
+
 
 name: Build and deploy ASP.Net Core app to an Azure Web App
 
-#env:
-#  AZURE_WEBAPP_NAME: devops002    # set this to the name of your Azure Web App
-#  AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
-#  DOTNET_VERSION: '3.1'                 # set this to the .NET Core version to use
+env:
+  AZURE_WEBAPP_NAME: devops002    # set this to the name of your Azure Web App
+  AZURE_WEBAPP_PACKAGE_PATH: '.'      # set this to the path to your web app project, defaults to the repository root
+  DOTNET_VERSION: '3.1'                 # set this to the .NET Core version to use
 
 on:
   push:
     branches: [ main ]
   workflow_dispatch:
-  environment: Production
+  #environment: Production
 
 jobs:
   build:
@@ -41,7 +41,7 @@ jobs:
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: ${{ secrets.DOTNET_VERSION }}
+          dotnet-version: ${{ env.DOTNET_VERSION }}
       
       - name: Set up dependency caching for faster builds
         uses: actions/cache@v2
@@ -61,7 +61,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: .net-app
-          path: ${{secrets.DOTNET_ROOT}}/myapp
+          path: ${{env.DOTNET_ROOT}}/myapp
 
   deploy:
     runs-on: ubuntu-latest
@@ -80,6 +80,6 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: ${{ secrets.AZURE_WEBAPP_PACKAGE_PATH }}
+          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
