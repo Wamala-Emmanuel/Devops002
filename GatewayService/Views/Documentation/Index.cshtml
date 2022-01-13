@@ -1,0 +1,14 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+
+@{
+    await Html.RenderPartialAsync("Partials/Breadcrumb");
+    await Html.RenderPartialAsync("Partials/Intro");
+    await Html.RenderPartialAsync("Partials/Auth");
+    await Html.RenderPartialAsync("Partials/Servers");
+    await Html.RenderPartialAsync("Partials/NiraErrorCodes");
+}
+

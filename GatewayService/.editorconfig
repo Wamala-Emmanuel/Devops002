@@ -1,0 +1,7 @@
+﻿[*.cs]
+
+# CS8618: Non-nullable field is uninitialized. Consider declaring as nullable.
+dotnet_diagnostic.CS8618.severity = silent
+
+# CS8606: Possible null reference assignment to iteration variable
+dotnet_diagnostic.CS8606.severity = silent
