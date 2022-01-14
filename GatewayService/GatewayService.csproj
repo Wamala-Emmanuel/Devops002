@@ -27,7 +27,7 @@ To ensure that as many ID verification requests as possible are processed, all i
     <WarningLevel>1</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-      <RestoreSources>$(RestoreSources);https://api.nuget.org/v3/index.json;/tmp/Nuget</RestoreSources>
+      <RestoreSources>$(RestoreSources);https://api.nuget.org/v3/index.json;</RestoreSources>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Logs\**" />
