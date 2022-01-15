@@ -27,7 +27,7 @@ jobs:
           
       - name: .Net build
         run: |
-          dotnet restore
+          dotnet restore --source https://api.nuget.org/v3/index.json --source /tmp/Nuget
           dotnet build --configuration Release
          
       - name: Set up dependency caching for faster builds
