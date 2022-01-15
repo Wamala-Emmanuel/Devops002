@@ -23,10 +23,11 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
-          source-url: ${{ secrets.NUGET_URL }}
-        env:
-          NUGET_AUTH_TOKEN: ${{ secrets.NUGET_TOKEN }}
-      
+      - name: .Net build
+          run: |  
+            dotnet restore
+            dotnet build --configuration --Release
+         
       - name: Set up dependency caching for faster builds
         uses: actions/cache@v2
         with:
@@ -35,11 +36,23 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-nuget-
             
-      - name: Add nuget.org as nuget package source
-        run: dotnet nuget add source --username USERNAME --password ${{ secrets.GITHUB_TOKEN }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/OWNER/index.json"
+  az-artifacts-build-and-deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+          source-url: ${{ secrets.NUGET_URL }}
+        env:
+          NUGET_AUTH_TOKEN: ${{ secrets.NUGET_TOKEN }}
 
       - name: Build with dotnet
-        run: dotnet build --configuration Release
+        run: |
+          donet restore
+          dotnet build --configuration Release
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
