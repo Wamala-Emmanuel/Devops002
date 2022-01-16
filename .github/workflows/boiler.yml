@@ -28,7 +28,7 @@ jobs:
       - name: restore
         run: |
           dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget.org
-          dotnet nuget add source https://pkgs.dev.azure.com/laboremus-uganda/LUG/_packaging/LugNuGetFeed/nuget/v3/index.json%22 -n azdevops --password owi6dg42c22s3rbt4z6vjttmjiuyb5waoh5erh73c6wbobsk2nfa
+          dotnet nuget add source https://pkgs.dev.azure.com/laboremus-uganda/LUG/_packaging/LugNuGetFeed/nuget/v3/index.json%22 -n azdevops -u wamala -p owi6dg42c22s3rbt4z6vjttmjiuyb5waoh5erh73c6wbobsk2nfa
           dotnet restore GatewayService/GatewayService.csproj
           
       - name: .Net build
