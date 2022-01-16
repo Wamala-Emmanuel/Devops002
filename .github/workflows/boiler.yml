@@ -25,11 +25,6 @@ jobs:
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.NUGET_TOKEN }}
           
-      - name: restore
-        run: |
-          dotnet nuget add source https://api.nuget.org/v3/index.json -n nuget.org
-          dotnet restore GatewayService/GatewayService.csproj
-          
       - name: .Net build
         run: dotnet build --configuration Release
          
