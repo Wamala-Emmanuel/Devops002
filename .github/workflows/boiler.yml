@@ -6,8 +6,8 @@ env:
   DOTNET_VERSION: '3.1.x'                
 
 on:
-  push:
-    branches: [ main ] 
+#   push:
+#     branches: [ main ] 
   workflow_dispatch:
 
 jobs:
@@ -28,14 +28,6 @@ jobs:
       - name: .Net build
         run: dotnet build --configuration Release
          
-#       - name: Set up dependency caching for faster builds
-#         uses: actions/cache@v2
-#         with:
-#           path: ~/.nuget/packages
-#           key: ${{ runner.os }}-nuget-${{ hashFiles('**/packages.lock.json') }}
-#           restore-keys: |
-#             ${{ runner.os }}-nuget-
-
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
