@@ -18,10 +18,10 @@ namespace GatewayService.Controllers
         private readonly IVerificationRequestService _verificationRequestService;
         private readonly IRequestService _requestService;
 
-        private readonly ILogger<RequestsController> _logger;
+        private readonly ILogger<VerificationRequestService> _logger;
 
         public RequestsController(IVerificationRequestService service,
-           IRequestService requestService, ILogger<RequestsController> logger)
+           IRequestService requestService, ILogger<VerificationRequestService> logger)
         {
             _logger = logger;
             _requestService = requestService;
@@ -39,19 +39,18 @@ namespace GatewayService.Controllers
             StatusCodes.Status200OK, 
             "The details of a given request", 
             typeof(RequestViewModel))]
-        [HttpGet("{id:guid}", Name = "GetRequestById")]
+        [HttpGet("{id}", Name = "GetRequestById")]
         public async Task<IActionResult> GetRequestStatus([FromRoute] Guid id)
         {
-            if (id == Guid.Empty)
-                return BadRequest("Invalid request Id");
-            var result = await _verificationRequestService.GetRequestStatusAsync(id);
-            if (result is null)
+            var result = await _verificationRequestService.GetRequestsAsync(new SearchRequest { Id = id });
+            if (result.Requests.Count == 0)
             {
-                _logger.LogInformation("Failed to find request with request Id: {RequestId}", id);
+                _logger.LogInformation("Failed to find request with request Id {0}", id);
                 return NotFound();
             }
-            _logger.LogInformation("Retrieved request with request Id: {request Id}", id);
-            return Ok(result);
+            _logger.LogInformation("Retrieved request with request Id {0}", id);
+
+            return Ok(result.Requests[0]);
         }
 
         /// <summary>
@@ -91,7 +90,7 @@ namespace GatewayService.Controllers
         public async Task<IActionResult> Create(
             [FromBody, SwaggerRequestBody("The verification request payload", Required = true)] NationalIdVerificationRequest request)
         {
-            _logger.LogInformation("New Verification request");
+            _logger.LogInformation("New Verification request.");
             var apiVersion = HttpContext.GetRequestedApiVersion();
 
             var requestId = await _requestService.Process(request, HttpContext.Request);

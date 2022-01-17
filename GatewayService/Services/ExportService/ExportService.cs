@@ -63,7 +63,7 @@ namespace GatewayService.Services
         {
             var exportRequest = await _exportRepository.FindAsync(id);
 
-            if (exportRequest is null)
+            if (exportRequest == null)
             {
                 throw new NotFoundException($"Failed to find export request with Id {id}.");
             }
@@ -87,7 +87,7 @@ namespace GatewayService.Services
                 throw new ClientFriendlyException($"The export request with Id {id} can not be downloaded.");
             }
 
-            _logger.LogInformation("Retrieved export request with request Id: {requestId}.", id);
+            _logger.LogInformation("Retrieved export request with request Id {requestId}.", id);
 
             if (!_directoryService.FileExists(exportRequest.FileName))
             {

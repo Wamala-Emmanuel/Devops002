@@ -29,7 +29,6 @@ using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
@@ -51,7 +50,7 @@ namespace GatewayService
     {
         private readonly ILogger<Startup> _logger;
 
-        public Startup(IConfiguration configuration, IWebHostEnvironment env, ILogger<Startup> logger)
+        public Startup(IConfiguration configuration, IHostingEnvironment env, ILogger<Startup> logger)
         {
             _logger = logger;
             Configuration = configuration;
@@ -64,7 +63,7 @@ namespace GatewayService
 
         public IConfiguration Configuration { get; }
 
-        public IWebHostEnvironment Environment { get; }
+        public IHostingEnvironment Environment { get; }
 
         private TelemetryConfiguration Telemetry { get; }
 
@@ -75,19 +74,12 @@ namespace GatewayService
         {
             
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
-            var dbSettings = Configuration.GetDbSettings();
-            services.AddDbContextPool<ApplicationDbContext>(options =>
+
+            services.AddDbContext<ApplicationDbContext>(options =>
             {
                 options.EnableSensitiveDataLogging()
-                    .UseSqlServer(connectionString,
-                    sqlServerOptionsAction: sqlOptions =>
-                    {
-                        sqlOptions.EnableRetryOnFailure(
-                        maxRetryCount: dbSettings.RetryCount,
-                        maxRetryDelay: TimeSpan.FromSeconds(Math.Pow(2, dbSettings.RetryCount)),
-                        errorNumbersToAdd: null);
-                    });
-            }, poolSize: dbSettings.MaxPoolSize);
+                    .UseSqlServer(connectionString);
+            });
 
             // enable cache
             services.AddMemoryCache();
@@ -142,16 +134,14 @@ namespace GatewayService
 
             var auth = Configuration.GetAuthServiceSettings();
             services.AddAuthentication("Bearer")
-                .AddJwtBearer(authenticationScheme: "Bearer", configureOptions: options => 
+                .AddIdentityServerAuthentication(options =>
                 {
                     options.Authority = auth.Authority;
-                    options.Audience = auth.ApiName;
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidTypes = new[] { "at+jwt" },
-                        ValidateAudience = true
-                    };
+                    options.RequireHttpsMetadata = false;
+                    options.ApiName = auth.ApiName;
+
                 });
+
 
             services.AddCors(options =>
             {
@@ -185,7 +175,7 @@ namespace GatewayService
                 .AddFluentValidation(s =>
                 {
                     s.RegisterValidatorsFromAssemblyContaining<Startup>();
-                    s.DisableDataAnnotationsValidation = true;
+                    s.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
                 });
 
             services.AddSignalR()
@@ -435,7 +425,7 @@ namespace GatewayService
             IdentityModelEventSource.ShowPII = true;
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
         {
             app.UseCors(_clientPermissions);
             if (env.IsDevelopment())

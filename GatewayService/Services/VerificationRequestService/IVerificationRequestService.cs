@@ -14,6 +14,5 @@ namespace GatewayService.Services
         /// <param name="request"></param>
         /// <returns></returns>
         Task<SearchResponse> GetRequestsAsync(SearchRequest request);
-        Task<RequestViewModel?> GetRequestStatusAsync(Guid requestId);
     }
 }

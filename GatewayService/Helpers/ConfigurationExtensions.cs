@@ -104,27 +104,6 @@ namespace GatewayService.Helpers
         {
             return configuration.GetSection("HangfireConfig").Get<HangfireConfig>();
         }
-
-        /// <summary>
-        /// Get Database context pool settings
-        /// </summary>
-        /// <param name="configuration"></param>
-        /// <returns></returns>
-        public static DbSettings GetDbSettings(this IConfiguration configuration)
-        {
-            return configuration.GetSection("DbSettings").Get<DbSettings>();
-        }
-
-        /// <summary>
-        /// The maximum number of instances retained by the pool
-        /// </summary>
-        /// <param name="config"></param>
-        /// <returns></returns>
-        public static int GetPoolSize(this IConfiguration config)
-        {
-            bool success = int.TryParse(config["PoolSize"], out int size);
-            return success ? size : 128;
-        }
     }
 
     public class RabbitMqConfig

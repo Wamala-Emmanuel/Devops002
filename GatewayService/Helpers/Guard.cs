@@ -17,9 +17,9 @@ namespace GatewayService.Helpers
             if (string.IsNullOrWhiteSpace(argumentValue)) throw new ClientFriendlyException(message);
         }
 
-        public static void ThrowIfNullOrEmpty(int? argumentValue, string message)
+        public static void ThrowIfNullOrEmpty(int argumentValue, string message)
         {
-            if (argumentValue is null) throw new ClientFriendlyException(message);
+            if (argumentValue == null) throw new ClientFriendlyException(message);
         }
 
         public static void ThrowIfSubstringLengthIsGreaterThanStringLength(string str, int subStringLength, string message)

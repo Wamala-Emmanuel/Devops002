@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FluentValidation;
 using FluentValidation.TestHelper;
 using GatewayService.DTOs;
 using GatewayService.Validators;
@@ -30,11 +29,8 @@ namespace GatewayService.Tests.Validators
                 }
             };
 
-            var result = _validator.TestValidate(request);
-
-            result.ShouldHaveValidationErrorFor(x => x.Date.To!.Value)
-                .WithSeverity(Severity.Error)
-                .WithErrorCode("SearchRequest.DateTo.DateToLessThanDateFrom");
+            _validator.ShouldHaveValidationErrorFor(r => r.Date.To!.Value, request)
+                        .WithErrorCode("SearchRequest.DateTo.DateToLessThanDateFrom");
         }
         
         [Fact]
@@ -49,9 +45,7 @@ namespace GatewayService.Tests.Validators
                 }
             };
 
-            var result = _validator.TestValidate(request);
-
-            result.ShouldNotHaveValidationErrorFor(x => x.Date.To);
+            _validator.ShouldNotHaveValidationErrorFor(r => r.Date.To, request);
         }
         
         [Fact]
@@ -66,9 +60,7 @@ namespace GatewayService.Tests.Validators
                 }
             };
 
-            var result = _validator.TestValidate(request);
-
-            result.ShouldNotHaveValidationErrorFor(x => x.Date.To);
+            _validator.ShouldNotHaveValidationErrorFor(r => r.Date.To, request);
         }
     }
 }

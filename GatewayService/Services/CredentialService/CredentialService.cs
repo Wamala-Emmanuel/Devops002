@@ -106,7 +106,6 @@ namespace GatewayService.Services
             _logger.LogInformation("The latest credentials for {niraUsername} have been updated in the database.", latestCredentials.Username);
 
             _logger.LogInformation("The renew password job has been scheduled.");
-            
         }
 
         public async Task<List<Credential>> GetAllCredentialsAsync()
@@ -167,7 +166,7 @@ namespace GatewayService.Services
 
             if (latestCredentials == null)
             {
-                _logger.LogInformation("Please set the latest credentials.");
+                _logger.LogInformation("Please set the latest credentials");
 
                 throw new NotFoundException($"Failed to find the latest credentials.");
             }

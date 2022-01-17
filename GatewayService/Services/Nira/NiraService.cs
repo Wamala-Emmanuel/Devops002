@@ -70,7 +70,7 @@ namespace GatewayService.Services.Nira
         {
             var request = await _requestRepository.FindAsync(requestId);
             
-            if (request is null)
+            if (request == null)
             {
                 throw new NotFoundException($"Failed to find request with Id: {requestId}");
             }
@@ -137,14 +137,14 @@ namespace GatewayService.Services.Nira
 
             _logger.LogInformation(
                 "Got a nira response for request with id: {requestId} at {receivedFromNira} with a result[{result}].", request.Id, request.ReceivedFromNira, request.Result);
-            
+
             _logger.LogTrace("Serialized nira response: {Result}", request.Result);
 
             var updatedRequest =  await _requestRepository.UpdateAsync(request);
 
             _notifierService.PublishRequest(updatedRequest);
 
-            _logger.LogInformation("Updated details of the request with id: {requestId}", request.Id);
+            _logger.LogInformation("Updated details of the request with id:{requestId}", request.Id);
         }
 
         public async Task RenewPasswordAsync(Guid credentialsId)
@@ -178,7 +178,7 @@ namespace GatewayService.Services.Nira
             {
                 var exception = new ApplicationException(
                     $"Failed to set credentials for {credentials.Username}: {Environment.NewLine} {response.Error.Code} - {response.Error.Message} ");
-                _logger.LogError(exception, "An error occured while setting new credentials for {credentials.Username}", credentials.Username);
+                _logger.LogError(exception, "An error occured while setting new credentials for {credentialsUsername}", credentials.Username);
 
                 throw exception;
             }
@@ -195,7 +195,6 @@ namespace GatewayService.Services.Nira
             _logger.LogInformation("The new credentials for {NiraUsername} have been saved to the database.", credentials.Username);
 
             _logger.LogDebug("The new password for {NiraUsername} is {newPassword}", credentials.Username, generatedPassword.newPassword);
-
         }
     }
 }

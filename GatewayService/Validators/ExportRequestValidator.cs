@@ -20,13 +20,15 @@ namespace GatewayService.Validators
         {
             _exportSettings = exportOptions.Value;
 
+            
+
             RuleFor(r => r.DateRange)
                 .NotEmpty()
                 .DependentRules(() => {
                     RuleFor(r => r.DateRange.From)
                         .NotEmpty();
             
-                    RuleFor(r => r.DateRange.To).Cascade(CascadeMode.Stop)
+                    RuleFor(r => r.DateRange.To).Cascade(CascadeMode.StopOnFirstFailure)
                         .NotEmpty()
                         .GreaterThan(r => r.DateRange.From)
                         .WithMessage("The start date '{ComparisonValue}' must be less than '{PropertyValue}'")
@@ -38,16 +40,16 @@ namespace GatewayService.Validators
                 .When(r => r.RequestStatus != null);
 
             RuleFor(r => r.Nin)
-                .Cascade(CascadeMode.Stop)
+                .Cascade(CascadeMode.StopOnFirstFailure)
                .Length(14)
                .When(r => !string.IsNullOrWhiteSpace(r.Nin))
                .WithErrorCode("ExportRequest.Nin.ExactLengthValidator");
 
             RuleFor(r => r.CardNumber)
-                .Cascade(CascadeMode.Stop)
+                .Cascade(CascadeMode.StopOnFirstFailure)
                 .Length(9)
                 .When(r => !string.IsNullOrWhiteSpace(r.CardNumber))
-                .WithErrorCode("ExportRequest.CardNumber.ExactLengthValidator");
+                .WithErrorCode("ExportRequest.CardNumber.ExactLengthValidator"); 
             
             RuleFor(r => r)
                 .MustAsync(async (r, cancellation) =>
@@ -56,7 +58,7 @@ namespace GatewayService.Validators
                     bool isExceeded = count > _exportSettings.RequestLimit;
                     return !isExceeded;
                 })
-                .When(r => r.DateRange is not null)
+                .When(r => r.DateRange != null)
                 .WithMessage(x => $"The export request exceeds the maximum {_exportSettings.RequestLimit} for exporting as configured.")
                 .WithErrorCode("ExportRequest.MaximumLimitExceeded");
 

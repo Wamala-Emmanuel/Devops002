@@ -33,8 +33,6 @@ namespace GatewayService.Services.Nira.Xml
         /// <summary>
         /// Prepare verifyPersonInformation xml request
         /// </summary>
-        /// <param name="username"></param>
-        /// <param name="password"></param>
         /// <param name="request"></param>
         /// <returns></returns>
         public string PrepareXmlRequest(string username, string password, verifyPersonInformationRequest request)
@@ -77,8 +75,6 @@ namespace GatewayService.Services.Nira.Xml
         /// <summary>
         /// Serialize change password xml request
         /// </summary>
-        /// <param name="username"></param>
-        /// <param name="password"></param>
         /// <param name="request"></param>
         /// 
         /// <returns></returns>        
@@ -141,7 +137,6 @@ namespace GatewayService.Services.Nira.Xml
             };
         }
 
-#nullable disable
         /// <summary>
         /// Deserialize verify person information xml response
         /// </summary>
@@ -232,8 +227,6 @@ namespace GatewayService.Services.Nira.Xml
             return response;
         }
 
-#nullable enable
-
         /// <summary>
         /// Writes a xml document based on the verify person envelope
         /// </summary>
@@ -257,7 +250,7 @@ namespace GatewayService.Services.Nira.Xml
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to serialize nin verification request xml");
-                throw;
+                throw ex;
             }
 
             _logger.LogInformation("Serialized successfully request xml");
@@ -290,7 +283,7 @@ namespace GatewayService.Services.Nira.Xml
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Failed to serialize new password request xml");
-                throw;
+                throw ex;
             }
             
             _logger.LogDebug(xml);

@@ -53,12 +53,12 @@ namespace GatewayService.Services.BillingService
             if (resp.StatusCode == HttpStatusCode.OK)
             {
                 _logger.LogInformation(
-                    "Notification sent request with ID: {request.ReferenceId} company: {request.CompanyId} response:{resp.Data}", request.ReferenceId, request.CompanyId, resp.Data);
+                     "Notification sent request with ID: {request.ReferenceId} company: {request.CompanyId} response:{resp.Data}", request.ReferenceId, request.CompanyId, resp.Data);
             }
             else
             {
                 _logger.LogWarning(
-                    "Notification failed request with ID: {request.ReferenceId} company: {request.CompanyId} statusCode:{resp.StatusCode} Message:{resp.Message}", request.ReferenceId, request.CompanyId, resp.Message);
+                   "Notification failed request with ID: {request.ReferenceId} company: {request.CompanyId} statusCode:{resp.StatusCode} Message:{resp.Message}", request.ReferenceId, request.CompanyId, resp.Message);
             }
         }
 
@@ -126,7 +126,7 @@ namespace GatewayService.Services.BillingService
             }
 
             _logger.LogInformation(
-                    "Billing info sent with request with ID: {ReferenceId} company ID: {CompanyId} response:{response}", billingRequest.ReferenceId, billingRequest.CompanyId, resp.Data);
+                "Billing info sent with request with ID: {ReferenceId} company ID: {CompanyId} response:{response}", billingRequest.ReferenceId, billingRequest.CompanyId, resp.Data);
 
             request.BillingUpdated = DateTime.UtcNow.AddHours(_offset);
 

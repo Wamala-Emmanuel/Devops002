@@ -44,8 +44,6 @@ namespace GatewayService.Services.Nira
         /// <summary>
         /// Verify person information
         /// </summary>
-        /// <param name="username"></param>
-        /// <param name="password"></param>
         /// <param name="request"></param>
         /// <returns></returns>
         public async Task<PersonInfoVerificationResponse> VerifyPersonInformation(

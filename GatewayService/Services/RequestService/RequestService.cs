@@ -50,12 +50,11 @@ namespace GatewayService.Services
         /// <summary>
         /// Process the request and get the nira response
         /// </summary>
-        /// <param name="request"></param>
-        /// <param name="httpRequest"></param>      
+        /// <param name="request"></param>      
         /// <returns></returns>
         public async Task<Guid> Process(NationalIdVerificationRequest request, HttpRequest httpRequest)
         {
-            _logger.LogInformation("Processing the verification request... with traceID: {TraceID}", httpRequest.HttpContext.TraceIdentifier);
+            _logger.LogInformation("Processing the verification request... with traceID: {traceID}", httpRequest.HttpContext.TraceIdentifier);
 
             var userInfo = _tokenUtil.GetTokenClaims(httpRequest);
 
@@ -78,7 +77,7 @@ namespace GatewayService.Services
                 CardNumber = request.CardNumber,
                 Nin = request.Nin,
                 Initiator = userName ?? null,
-                InitiatorId = Guid.TryParse(sub, out var userId) ? userId : null,
+                InitiatorId = Guid.TryParse(sub, out Guid userId) ? userId : (Guid?)null,
                 InitiatorEmail = userEmail ?? null,
                 ReceivedAt = DateTime.UtcNow.AddHours(_offset),
                 RequestStatus = RequestStatus.Pending,
@@ -97,12 +96,12 @@ namespace GatewayService.Services
             if (subscriptionExists)
             {
                 _logger.LogInformation(
-                    "New verification request with request Id {RequestId} with subscriptionKey: {SubscriptionKey} and with traceID: {traceID}", newRequest.Id, subscriptionKey, httpRequest.HttpContext.TraceIdentifier);
+                    "New verification request with request Id {requestId} with subscriptionKey: {subscriptionKey} and with traceID: {traceID}", newRequest.Id, subscriptionKey, httpRequest.HttpContext.TraceIdentifier);
             }
             else
             {
                 _logger.LogInformation(
-                    "New verification request with request Id {RequestId} made by: {Initiator} with traceID: {TraceID}", newRequest.Id, newRequest.Initiator, httpRequest.HttpContext.TraceIdentifier);
+                    "New verification request with request Id {requestId} made by: {initiator} with traceID: {traceID}", newRequest.Id, newRequest.Initiator, httpRequest.HttpContext.TraceIdentifier);
             }
 
             var jobId = _backgroundJob.Enqueue(() => _niraService.SendRequest(newRequest.Id));
@@ -113,19 +112,18 @@ namespace GatewayService.Services
 
                 if (string.IsNullOrWhiteSpace(latestCredentials.JobId) && !latestCredentials.ExpiresOn.HasValue)
                 {
-                    _logger.LogInformation("Scheduling renew password job for {NiraUserName} the latest credentials", latestCredentials.Username);
+                    _logger.LogInformation("Scheduling renew password job for {niraUserName} the latest credentials", latestCredentials.Username);
 
                     _backgroundJob.ContinueJobWith(jobId,
                         () => _credentialService.SchedulePasswordRenewalJobAsync(newRequest.Id));
                 }
                 else
                 {
-                    _logger.LogInformation("The latest credentials {NiraUserName} have a renew password job scheduled already.", latestCredentials);
+                    _logger.LogInformation("The latest credentials {niraUserName} have a renew password job scheduled already.", latestCredentials);
                 }
             }
 
             return newRequest.Id;
         }
-        
     }
 }

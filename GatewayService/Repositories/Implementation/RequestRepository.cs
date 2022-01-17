@@ -51,7 +51,6 @@ namespace GatewayService.Repositories.Implementation
         /// </summary>
         /// <typeparam name="Request"></typeparam>
         /// <param name="id"></param>
-        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         public async Task<bool> ExistsAsync<Request>(Guid id, CancellationToken cancellationToken = default)
         {
@@ -61,8 +60,7 @@ namespace GatewayService.Repositories.Implementation
         /// <summary>
         /// Checks if a request with a given guid exists
         /// </summary>
-        /// <param name="id"></param>
-        /// <param name="cancellationToken"></param>    
+        /// <param name="id"></param>    
         /// <returns></returns>
         public async Task<Request> FindAsync(Guid id, CancellationToken cancellationToken = default)
         {
@@ -73,8 +71,7 @@ namespace GatewayService.Repositories.Implementation
         /// <summary>
         /// Insert request in the database
         /// </summary>
-        /// <param name="request"></param>
-        /// <param name="cancellationToken"></param>    
+        /// <param name="request"></param>    
         /// <returns>Request</returns>
         public async Task<Request> AddAsync(Request request, CancellationToken cancellationToken = default)
         {
@@ -86,8 +83,7 @@ namespace GatewayService.Repositories.Implementation
         /// <summary>
         /// Updates a request with a given guid
         /// </summary>
-        /// <param name="request"></param>
-        /// <param name="cancellationToken"></param>    
+        /// <param name="request"></param>    
         /// <returns></returns>
         public async Task<Request> UpdateAsync(Request request, CancellationToken cancellationToken = default)
         {
@@ -175,6 +171,10 @@ namespace GatewayService.Repositories.Implementation
             {
                 return ComposeExportQuery(request, query);
             }
+
+            query = query.OrderByDescending(r => r.ReceivedAt);
+
+            return query;
         }
 
         private IQueryable<Request> ComposeNinExportQuery(
@@ -234,6 +234,8 @@ namespace GatewayService.Repositories.Implementation
                 query = query.Where(r => requestStatuses.Contains(r.RequestStatus));
                 return ComposeExportQuery(request, query);
             }
+
+            return query;
         }
 
         private IQueryable<Request> QueryNiraResult(List<RequestStatus> requestStatuses, SqlParameter? initialParam, SqlParameter? additionalParam, string rawQuery)
@@ -324,7 +326,7 @@ namespace GatewayService.Repositories.Implementation
         {
             if (request.Id.HasValue)
             {
-                query = query.Where(r => r.Id == request.Id.Value);
+                query = query.Where(r => r.Id.ToString().ToLower() == request.Id.Value.ToString().ToLower());
             }
 
             if (request.Date != null)

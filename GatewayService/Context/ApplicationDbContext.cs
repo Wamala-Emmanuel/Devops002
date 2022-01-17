@@ -1,8 +1,15 @@
-﻿using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using GatewayService.DTOs;
 using GatewayService.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.DataEncryption;
 using Microsoft.EntityFrameworkCore.DataEncryption.Providers;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace GatewayService.Context
 {
@@ -10,13 +17,11 @@ namespace GatewayService.Context
     public class ApplicationDbContext : DbContext
     {
         private readonly IEncryptionProvider _provider;
-        public string Key { get; set; } = "6fcb6050650a435780f3420b158b7001";
-        public byte[] _initializationVector => new byte[] { 26, 19, 18, 90, 117, 17, 87, 43, 24, 103, 11, 44, 18, 113, 93, 14 };
-        public byte[] _keyBytes => Encoding.Default.GetBytes(Key);
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, 
+            IOptions<EncryptionOptions> encryptionOptions) : base(options)
         {
-            _provider = new AesProvider(_keyBytes, _initializationVector);
+            _provider = new AesProvider(encryptionOptions.Value.KeyBytes, encryptionOptions.Value.InitializationVector);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

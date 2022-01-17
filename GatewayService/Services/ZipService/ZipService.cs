@@ -56,7 +56,7 @@ namespace GatewayService.Services
         {
             var requestsExport = await _exportRepository.FindAsync(requestId);
 
-            if (requestsExport is null)
+            if (requestsExport == null)
             {
                 throw new NotFoundException($"Failed to find export request with Id {requestId}");
             }
@@ -83,7 +83,7 @@ namespace GatewayService.Services
         {
             var requestsExportList = await _exportRepository.GetNotDownloadedRequestsExportListAsync(_exportSettings.DaysBack, _offset);
 
-            if (requestsExportList is not null)
+            if (requestsExportList != null)
             {
                 _logger.LogInformation("Retrieved export request files that arenot downloaded");
 
@@ -143,7 +143,7 @@ namespace GatewayService.Services
         {
             var requestsExport = await _exportRepository.FindAsync(requestId);
 
-            if (requestsExport is null)
+            if (requestsExport == null)
             {
                 throw new NotFoundException($"Failed to find export request with Id {requestId}");
             }
@@ -170,6 +170,8 @@ namespace GatewayService.Services
             await _exportRepository.UpdateAsync(requestsExport);
 
             _logger.LogInformation("Export Request with request Id: {requestId} successfully updated.", requestId);
+
         }
+
     }
 }

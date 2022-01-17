@@ -65,7 +65,7 @@ namespace GatewayService.HangFire
             catch (Exception e)
             {
                 Log.Error(e, "Error during dashboard hangfire jwt validation process");
-                throw;
+                throw e;
             }
 
             if (setCookie)

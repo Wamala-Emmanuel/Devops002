@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using GatewayService.Controllers;
 using GatewayService.DTOs;
 using GatewayService.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Xunit;
 using Xunit.Abstractions;
@@ -14,8 +16,10 @@ namespace GatewayService.Tests.Controllers
 {
     public class RequestsControllerTests : BaseControllerTests
     {
+        private readonly Mock<HttpRequest> _mockRequest;
         private readonly Mock<IVerificationRequestService> _verificationServiceMock;
         private readonly Mock<IRequestService> _requestServiceMock;
+        private readonly ILogger<VerificationRequestService> _logger;
         private readonly Guid _requestId = Guid.NewGuid();
         private readonly SearchRequest _searchRequest = TestHelper.GetTestSearchRequest();
         private readonly SearchResponse _response;
@@ -28,22 +32,20 @@ namespace GatewayService.Tests.Controllers
 
             _verificationServiceMock = new Mock<IVerificationRequestService>();
 
-            testOutputHelper.BuildLoggerFor<VerificationRequestService>();
-            
-            var controllerLogger = testOutputHelper.BuildLoggerFor<RequestsController>();
+            _logger = testOutputHelper.BuildLoggerFor<VerificationRequestService>();
 
-            var mockRequest = TestHelper.CreateMockRequest(_searchRequest);
+            _mockRequest = TestHelper.CreateMockRequest(_searchRequest);
             
             _response = TestHelper.GetTestSearchResponseResults(_searchRequest);
 
-            _requestController = new RequestsController(_verificationServiceMock.Object, _requestServiceMock.Object, controllerLogger)
+            _requestController = new RequestsController(_verificationServiceMock.Object, _requestServiceMock.Object, _logger)
             {
                 ControllerContext = controllerContext
             };
 
             _verificationServiceMock.Setup(x => x.GetRequestsAsync(It.IsAny<SearchRequest>()));
 
-            _requestServiceMock.Setup(x => x.Process(It.IsAny<NationalIdVerificationRequest>(), mockRequest.Object));
+            _requestServiceMock.Setup(x => x.Process(It.IsAny<NationalIdVerificationRequest>(), _mockRequest.Object));
         }
 
         [Fact]
@@ -81,8 +83,7 @@ namespace GatewayService.Tests.Controllers
         [Fact]
         public async Task GetRequestStatus_ShouldReturnResponseAndValidStatus()
         {
-            _verificationServiceMock.Setup(x => 
-                x.GetRequestStatusAsync(It.IsAny<Guid>())).ReturnsAsync(_response.Requests[0]);
+            _verificationServiceMock.Setup(x => x.GetRequestsAsync(It.IsAny<SearchRequest>())).ReturnsAsync(_response);
 
             var response = await _requestController.GetRequestStatus(_requestId);
 
@@ -95,24 +96,14 @@ namespace GatewayService.Tests.Controllers
         public async Task GetRequestStatus_ShouldReturnNotFoundResponseWhenRequestDoesntExist()
         {
             _verificationServiceMock.Setup(
-                x => x.GetRequestStatusAsync(It.IsAny<Guid>()))
-                .ReturnsAsync((RequestViewModel?)null);
+                x => x.GetRequestsAsync(It.IsAny<SearchRequest>()))
+                .ReturnsAsync(new SearchResponse() { 
+                    Requests = new List<RequestViewModel>()
+                });
 
             var response = await _requestController.GetRequestStatus(_requestId);
 
             Assert.IsType<NotFoundResult>(response);
-        }
-        
-        [Fact]
-        public async Task GetRequestStatus_ShouldReturnBadRequestResponseWhenGivenAnEmptyGuid()
-        {
-            _verificationServiceMock.Setup(
-                    x => x.GetRequestStatusAsync(It.IsAny<Guid>()))
-                .ReturnsAsync((RequestViewModel?)null);
-
-            var response = await _requestController.GetRequestStatus(Guid.Empty);
-
-            Assert.IsType<BadRequestObjectResult>(response);
         }
 
         [Fact]

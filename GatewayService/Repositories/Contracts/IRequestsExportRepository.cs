@@ -14,7 +14,6 @@ namespace GatewayService.Repositories.Contracts
         /// </summary>
         /// <param name="days"></param>
         /// <param name="offset"></param>
-        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         Task<List<RequestsExport>> GetNotDownloadedRequestsExportListAsync(int days, double offset, CancellationToken cancellationToken = default);
     }

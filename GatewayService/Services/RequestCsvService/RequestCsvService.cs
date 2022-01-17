@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
 using System.Threading.Tasks;
+using CsvHelper;
 using GatewayService.DTOs;
 using GatewayService.Helpers;
+using GatewayService.Helpers.Nira;
 using GatewayService.Models;
 using GatewayService.Repositories.Contracts;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Newtonsoft.Json;
@@ -53,7 +57,7 @@ namespace GatewayService.Services
         {
             var exportRequest = await _exportRepository.FindAsync(requestId);
 
-            if (exportRequest is null)
+            if (exportRequest == null)
             {
                 throw new NotFoundException($"Failed to find export request with Id {requestId}");
             }

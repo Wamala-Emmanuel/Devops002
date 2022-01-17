@@ -1237,16 +1237,6 @@
             Date when the password is expected to expire
             </summary>
         </member>
-        <member name="P:GatewayService.DTOs.DbSettings.MaxPoolSize">
-            <summary>
-            The maximum number of instances retained by the pool
-            </summary>
-        </member>
-        <member name="P:GatewayService.DTOs.DbSettings.RetryCount">
-            <summary>
-            This enables one to set the number of maximum retries on the database connection
-            </summary>
-        </member>
         <member name="P:GatewayService.DTOs.ErrorResponse.Error">
             <summary>
             Error object
@@ -1787,20 +1777,6 @@
             <param name="builder"></param>
             <returns></returns>
         </member>
-        <member name="M:GatewayService.Helpers.ConfigurationExtensions.GetDbSettings(Microsoft.Extensions.Configuration.IConfiguration)">
-            <summary>
-            Get Database context pool settings
-            </summary>
-            <param name="configuration"></param>
-            <returns></returns>
-        </member>
-        <member name="M:GatewayService.Helpers.ConfigurationExtensions.GetPoolSize(Microsoft.Extensions.Configuration.IConfiguration)">
-            <summary>
-            The maximum number of instances retained by the pool
-            </summary>
-            <param name="config"></param>
-            <returns></returns>
-        </member>
         <member name="P:GatewayService.Helpers.HangfireConfig.WorkerCount">
             <summary>
             The number of worker threads in a dedicated pool that run inside Hangfire Server subsystem
@@ -2301,7 +2277,6 @@
             Returns a list of type Request
             </summary>
             <param name="request"></param>
-            <param name="cancellationToken"></param>
             <returns></returns>
         </member>
         <member name="M:GatewayService.Repositories.Contracts.IRequestRepository.GetExportRequestCountAsync(GatewayService.DTOs.ExportRequest,System.Threading.CancellationToken)">
@@ -2309,7 +2284,6 @@
             Returns the number of requests in an export request
             </summary>
             <param name="request"></param>
-            <param name="cancellationToken"></param>
             <returns></returns>
         </member>
         <member name="M:GatewayService.Repositories.Contracts.IRequestRepository.GetExportRequestListAsync(GatewayService.DTOs.ExportRequest,GatewayService.DTOs.ExportPagination,System.Threading.CancellationToken)">
@@ -2318,7 +2292,6 @@
             </summary>
             <param name="request"></param>
             <param name="pagination"></param>
-            <param name="cancellationToken"></param>
             <returns></returns>
         </member>
         <member name="M:GatewayService.Repositories.Contracts.IRequestsExportRepository.GetNotDownloadedRequestsExportListAsync(System.Int32,System.Double,System.Threading.CancellationToken)">
@@ -2327,7 +2300,6 @@
             </summary>
             <param name="days"></param>
             <param name="offset"></param>
-            <param name="cancellationToken"></param>
             <returns></returns>
         </member>
         <member name="M:GatewayService.Repositories.Implementation.RequestRepository.GetAllPagedListAsync(GatewayService.DTOs.SearchRequest,System.Threading.CancellationToken)">
@@ -2342,31 +2314,27 @@
             </summary>
             <typeparam name="Request"></typeparam>
             <param name="id"></param>
-            <param name="cancellationToken"></param>
             <returns></returns>
         </member>
         <member name="M:GatewayService.Repositories.Implementation.RequestRepository.FindAsync(System.Guid,System.Threading.CancellationToken)">
             <summary>
             Checks if a request with a given guid exists
             </summary>
-            <param name="id"></param>
-            <param name="cancellationToken"></param>    
+            <param name="id"></param>    
             <returns></returns>
         </member>
         <member name="M:GatewayService.Repositories.Implementation.RequestRepository.AddAsync(GatewayService.Models.Request,System.Threading.CancellationToken)">
             <summary>
             Insert request in the database
             </summary>
-            <param name="request"></param>
-            <param name="cancellationToken"></param>    
+            <param name="request"></param>    
             <returns>Request</returns>
         </member>
         <member name="M:GatewayService.Repositories.Implementation.RequestRepository.UpdateAsync(GatewayService.Models.Request,System.Threading.CancellationToken)">
             <summary>
             Updates a request with a given guid
             </summary>
-            <param name="request"></param>
-            <param name="cancellationToken"></param>    
+            <param name="request"></param>    
             <returns></returns>
         </member>
         <member name="M:GatewayService.Services.BillingService.BillingService.CreateNotificationAsync(GatewayService.DTOs.BillingRequest)">
@@ -2380,8 +2348,6 @@
             <summary>
             Verify person information
             </summary>
-            <param name="username"></param>
-            <param name="password"></param>
             <param name="request"></param>
             <returns></returns>
         </member>
@@ -2412,8 +2378,6 @@
             <summary>
             Prepare verifyPersonInformation xml request
             </summary>
-            <param name="username"></param>
-            <param name="password"></param>
             <param name="request"></param>
             <returns></returns>
         </member>
@@ -2421,8 +2385,6 @@
             <summary>
             Serialize change password xml request
             </summary>
-            <param name="username"></param>
-            <param name="password"></param>
             <param name="request"></param>
             
             <returns></returns>        
@@ -2485,8 +2447,7 @@
             <summary>
             Process the request and get the nira response
             </summary>
-            <param name="request"></param>
-            <param name="httpRequest"></param>      
+            <param name="request"></param>      
             <returns></returns>
         </member>
         <member name="M:GatewayService.Services.IVerificationRequestService.GetRequestsAsync(GatewayService.DTOs.SearchRequest)">

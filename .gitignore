@@ -8,9 +8,3 @@ GatewayService/Logs/
 GatewayService/wwwroot/exports/
 .idea/
 TestResults/
-GatewayService/GatewayService.csproj.user
-GatewayService/Properties/serviceDependencies.GatewayService20211208132527 - Web Deploy.json
-GatewayService/Properties/serviceDependencies.GatewayService20211208132527 - Web Deploy.json.user
-GatewayService/Properties/serviceDependencies.json
-GatewayService/Properties/ServiceDependencies/GatewayService20211208132527 - Web Deploy/mssql1.arm.json
-GatewayService/Properties/ServiceDependencies/GatewayService20211208132527 - Web Deploy/profile.arm.json

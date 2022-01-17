@@ -9,7 +9,6 @@ using System.Xml.Serialization;
 
 namespace GatewayService.Helpers
 {
-#nullable disable
     public class StringWriterUtf8 : StringWriter
     {
         public StringWriterUtf8(StringBuilder sb) : base(sb)

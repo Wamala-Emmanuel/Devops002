@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using FluentValidation;
 using FluentValidation.TestHelper;
 using GatewayService.DTOs;
 using GatewayService.Services;
@@ -70,201 +69,121 @@ namespace GatewayService.Tests.Validators
         }
 
         [Fact]
-        public void Validator_Should_HaveAnErrorWhenNinIsNull()
+        public void Validator_ShouldHaveErrorWhenNinIsNullOrEmpty()
         {
-            var request = new NationalIdVerificationRequest
-            {
-                Nin = null,
-                DateOfBirth = DateTime.UtcNow,
-                CardNumber = "000092896",
-                GivenNames = "SUSAN",
-                Surname = "ADONG",
-            };
-
-            var result = _validator.TestValidate(request);
-
-            result.ShouldHaveValidationErrorFor(x => x.Nin)
-                .WithErrorMessage("'Nin' must not be empty.")
-                .WithSeverity(Severity.Error)
+            _validator.ShouldHaveValidationErrorFor(m => m.Nin, null as string)
+                .WithErrorCode("NationalIdVerificationRequest.Nin.NullOrEmpty");
+            _validator.ShouldHaveValidationErrorFor(m => m.Nin, string.Empty)
                 .WithErrorCode("NationalIdVerificationRequest.Nin.NullOrEmpty");
         }
-
+        
         [Fact]
-        public void Validator_Should_HaveAnErrorWhenNinIsEmpty()
+        public void Validator_ShouldHaveErrorWhenNinLengthIsLessThan14()
         {
-            var request = new NationalIdVerificationRequest
-            {
-                Nin = string.Empty,
-                DateOfBirth = DateTime.UtcNow,
-                CardNumber = "000092896",
-                GivenNames = "SUSAN",
-                Surname = "ADONG",
-            };
-
-            var result = _validator.TestValidate(request);
-
-            result.ShouldHaveValidationErrorFor(x => x.Nin)
-                .WithErrorMessage("'Nin' must not be empty.")
-                .WithSeverity(Severity.Error)
-                .WithErrorCode("NationalIdVerificationRequest.Nin.NullOrEmpty");
-        }
-
-        [Fact]
-        public void Validator_Should_HaveAnErrorWhenNinLengthIsLessThan14()
-        {
-            var request = new NationalIdVerificationRequest
-            {
-                Nin = "CFJKL0MNKLW",
-                DateOfBirth = DateTime.UtcNow,
-                CardNumber = "000092896",
-                GivenNames = "SUSAN",
-                Surname = "ADONG",
-            };
-
-            var result = _validator.TestValidate(request);
-
-            result.ShouldHaveValidationErrorFor(x => x.Nin)
-                .WithErrorMessage("'Nin' must be 14 characters in length. You entered 11 characters.")
-                .WithSeverity(Severity.Error)
+            _validator.ShouldHaveValidationErrorFor(m => m.Nin, "CMD124")
                 .WithErrorCode("NationalIdVerificationRequest.Nin.ExactLengthValidator");
         }
-
+        
         [Fact]
-        public void Validator_Should_HaveAnErrorWhenNinLengthIsGreaterThan14()
+        public void Validator_ShouldHaveErrorWhenNinLengthIsMoreThan14()
         {
-            var request = new NationalIdVerificationRequest
-            {
-                Nin = "CFJKL0MNKLW4562RTKLN",
-                DateOfBirth = DateTime.UtcNow,
-                CardNumber = "000092896",
-                GivenNames = "SUSAN",
-                Surname = "ADONG",
-            };
-
-            var result = _validator.TestValidate(request);
-
-            result.ShouldHaveValidationErrorFor(x => x.Nin)
-                .WithErrorMessage("'Nin' must be 14 characters in length. You entered 20 characters.")
-                .WithSeverity(Severity.Error)
+            _validator.ShouldHaveValidationErrorFor(m => m.Nin, "CMD1240588012VTHUE")
                 .WithErrorCode("NationalIdVerificationRequest.Nin.ExactLengthValidator");
         }
-
+        
         [Fact]
-        public void Validator_Should_HaveAnErrorWhenCardNumberIsNull()
+        public void Validator_ShouldHaveErrorWhenCardNumberIsNullOrEmpty()
         {
-            var request = new NationalIdVerificationRequest
-            {
-                Nin = "CF640761001DDD",
-                DateOfBirth = DateTime.UtcNow,
-                CardNumber = null,
-                GivenNames = "SUSAN",
-                Surname = "ADONG",
-            };
-
-            var result = _validator.TestValidate(request);
-
-            result.ShouldHaveValidationErrorFor(x => x.CardNumber)
-                .WithErrorMessage("'Card Number' must not be empty.")
-                .WithSeverity(Severity.Error)
+            _validator.ShouldHaveValidationErrorFor(m => m.CardNumber, null as string)
+                .WithErrorCode("NationalIdVerificationRequest.CardNumber.NullOrEmpty");
+            _validator.ShouldHaveValidationErrorFor(m => m.CardNumber, string.Empty)
                 .WithErrorCode("NationalIdVerificationRequest.CardNumber.NullOrEmpty");
         }
 
         [Fact]
-        public void Validator_Should_HaveAnErrorWhenCardNumberIsEmpty()
+        public void Validator_ShouldHaveErrorWhenCardNumberLengthIsLessThan9()
         {
-            var request = new NationalIdVerificationRequest
-            {
-                Nin = "CF640761001DDD",
-                DateOfBirth = DateTime.UtcNow,
-                CardNumber = string.Empty,
-                GivenNames = "SUSAN",
-                Surname = "ADONG",
-            };
-
-            var result = _validator.TestValidate(request);
-
-            result.ShouldHaveValidationErrorFor(x => x.CardNumber)
-                .WithErrorMessage("'Card Number' must not be empty.")
-                .WithSeverity(Severity.Error)
-                .WithErrorCode("NationalIdVerificationRequest.CardNumber.NullOrEmpty");
-        }
-
-        [Fact]
-        public void Validator_Should_HaveAnErrorWhenCardNumberLengthIsLessThan9()
-        {
-            var request = new NationalIdVerificationRequest
-            {
-                Nin = "CF640761001DDD",
-                DateOfBirth = DateTime.UtcNow,
-                CardNumber = "00009289",
-                GivenNames = "SUSAN",
-                Surname = "ADONG",
-            };
-
-            var result = _validator.TestValidate(request);
-
-            result.ShouldHaveValidationErrorFor(x => x.CardNumber)
-                .WithErrorMessage("'Card Number' must be 9 characters in length. You entered 8 characters.")
-                .WithSeverity(Severity.Error)
+            _validator.ShouldHaveValidationErrorFor(m => m.CardNumber, "00124")
                 .WithErrorCode("NationalIdVerificationRequest.CardNumber.ExactLengthValidator");
         }
 
         [Fact]
-        public void Validator_Should_HaveAnErrorWhenCardNumberLengthIsGreaterThan9()
+        public void Validator_ShouldHaveErrorWhenCardNumberLengthIsMoreThan9()
         {
-            var request = new NationalIdVerificationRequest
-            {
-                Nin = "CF640761001DDD",
-                DateOfBirth = DateTime.UtcNow,
-                CardNumber = "0000928961234",
-                GivenNames = "SUSAN",
-                Surname = "ADONG",
-            };
-
-            var result = _validator.TestValidate(request);
-
-            result.ShouldHaveValidationErrorFor(x => x.CardNumber)
-                .WithErrorMessage("'Card Number' must be 9 characters in length. You entered 13 characters.")
-                .WithSeverity(Severity.Error)
+            _validator.ShouldHaveValidationErrorFor(m => m.CardNumber, "1240588012741")
                 .WithErrorCode("NationalIdVerificationRequest.CardNumber.ExactLengthValidator");
         }
 
         [Fact]
         public void Validator_ShouldHaveErrorWhenSurnameGivenNameAndDateOfBirthAreNullOrEmpty()
         {
-            var request = new NationalIdVerificationRequest
+            var model = new NationalIdVerificationRequest
             {
-                Nin = "CF640761001DDD",
-                CardNumber = "000092896"
+               Nin = "CM0588012VTHUE",
+               CardNumber = "426463810",
             };
 
-            var result = _validator.TestValidate(request);
+            var result = _validator.Validate(model);
 
-            result.ShouldHaveValidationErrorFor(x => x.Surname)
-                .WithErrorMessage("Include atleast given names or the date of birth")
-                .WithSeverity(Severity.Error)
-                .WithErrorCode("NationalIdVerificationRequest.OptionalFields.NullOrEmpty");
-
-            result.ShouldHaveValidationErrorFor(x => x.GivenNames)
-                .WithErrorMessage("Include atleast a surname or the date of birth")
-                .WithSeverity(Severity.Error)
-                .WithErrorCode("NationalIdVerificationRequest.OptionalFields.NullOrEmpty");
-
-            result.ShouldHaveValidationErrorFor(x => x.DateOfBirth)
-                .WithErrorMessage("Include atleast a surname or given names")
-                .WithSeverity(Severity.Error)
-                .WithErrorCode("NationalIdVerificationRequest.OptionalFields.NullOrEmpty");
+            Assert.False(result.IsValid);
+            Assert.Contains("Surname", result.Errors.Select(x => x.PropertyName));
+            Assert.Contains("NationalIdVerificationRequest.OptionalFields.NullOrEmpty", result.Errors.Select(x => x.ErrorCode));
         }
+
+        [Fact]
+        public void Validator_ShouldHaveError_WhenDatabaseCredentialsAreUsedButNotSet()
+        {
+            _niraSettingsMock.Setup(x => x.Value)
+                .Returns(new NiraSettings
+                {
+                    CredentialConfig = new CredentialConfig { UseDatabaseCredentials = true}
+                });
+
+            _credentialServiceMock.Setup(x => x.AreDatabaseCredentialsSet()).ReturnsAsync(false);
+
+            _validator.ShouldHaveValidationErrorFor(x => x.Nin, "CF200721001NRA")
+                .WithErrorCode("NationalIdVerificationRequest.Base.DatabaseCredentialsHaveNotBeenSet");
+        }
+
+        [Fact]
+        public void Validator_ShouldHaveError_WhenConfigCredentialsAreNotSet()
+        {
+            _credentialServiceMock.Setup(x => x.AreConfigCredentialsSet()).Returns(false);
+
+            _validator.ShouldHaveValidationErrorFor(x => x.Nin, "CF200721001NRA")
+                .WithErrorCode("NationalIdVerificationRequest.Base.ConfigCredentialsHaveNotBeenSet");
+        }
+        
+        [Fact]
+        public void Validator_ShouldHaveError_WhenConfigCredentialsAreExpired()
+        {
+            var model = new NationalIdVerificationRequest
+            {
+                Nin = "CM0588012VTHUE",
+                CardNumber = "426463810",
+                Surname = "Lawson"
+            };
+
+            _credentialServiceMock.Setup(x => x.GetCurrentCredentialsAsync())
+                .ReturnsAsync(new DTOs.Credentials.CredentialResponse
+                {
+                    Id = Guid.NewGuid(),
+                    CreatedOn = DateTime.Now.AddDays(-79),
+                    ExpiresOn = DateTime.Now.AddDays(-20),
+                    Username = "Emata@BankROOT"
+                });
+
+            var result = _validator.Validate(model);
+
+            Assert.False(result.IsValid);
+            Assert.Contains("NationalIdVerificationRequest.Base.ExpiredCredentials", result.Errors.Select(x => x.ErrorCode));
+            Assert.Contains("NIRA credentials are expired. Please contact your system administrator.", result.Errors.Select(x => x.ErrorMessage));
+        }
+
 
         [Fact]
         public void Validator_ShouldHaveError_WhenNitaCredentialsAreUsedButNotSet()
         {
-            var request = new NationalIdVerificationRequest
-            {
-                Nin = "CF640761001DDD",
-                CardNumber = "000092896"
-            };
-
             _verificationOptionsMock.Setup(x => x.Value)
                 .Returns(new VerificationSettings
                 {
@@ -273,11 +192,8 @@ namespace GatewayService.Tests.Validators
 
             _nitaCredentialServiceMock.Setup(x => x.AreNitaCredentialsSet()).ReturnsAsync(false);
 
-            var result = _validator.TestValidate(request);
-
-            result.ShouldHaveValidationErrorFor(x => x.Nin)
+            _validator.ShouldHaveValidationErrorFor(x => x.Nin, "CF200721001NRA")
                 .WithErrorCode("NationalIdVerificationRequest.Base.NitaCredentialsHaveNotBeenSet")
-                .WithSeverity(Severity.Error)
                 .WithErrorMessage("NITA client credentials have not been set. Please contact your system administrator.");
         }
     }

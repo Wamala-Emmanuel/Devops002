@@ -4,7 +4,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Net.Mime;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -45,7 +44,7 @@ namespace GatewayService.Services.Nita.Json
         {
             var credentials = await _nitaCredentialRepository.GetLatestAsync();
 
-            if (credentials is null)
+            if (credentials == null)
             {
                 _logger.LogInformation("Please set the NITA credentials.");
 
@@ -86,7 +85,7 @@ namespace GatewayService.Services.Nita.Json
             else
             {
                 _logger.LogWarning(
-                    "Failed to get a NITA access token statusCode:{responseStatusCode} Message:{responseRequestMessage}", response.StatusCode, response.RequestMessage);
+                   "Failed to get a NITA access token statusCode:{responseStatusCode} Message:{responseRequestMessage}", response.StatusCode, response.RequestMessage);
 
                 throw new NotFoundException($"Failed to get a NITA access token for {credentials.ClientKey}.");
             }
@@ -212,7 +211,7 @@ namespace GatewayService.Services.Nita.Json
                 PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
             });
 
-            request.Content = new StringContent(jsonContent, Encoding.UTF8, MediaTypeNames.Application.Json);
+            request.Content = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
             var client = _clientFactory.CreateClient("nitahub");
 
@@ -247,6 +246,7 @@ namespace GatewayService.Services.Nita.Json
                     };
 
                     return verificationResponse;
+                    break;
 
                 case HttpStatusCode.BadRequest:
 
@@ -273,11 +273,15 @@ namespace GatewayService.Services.Nita.Json
 
                     return errorVerificationResponse;
 
+                    break;
+
                 default:
                     _logger.LogWarning(
                         "Failed to change password for {niraUsername} through NITA statusCode:{responseStatusCode} Message:{responseRequestMessage}", username, response.StatusCode, response.RequestMessage);
 
                     throw new NotFoundException($"Failed to change password for {username}.");
+
+                    break;
             }
 
         }

@@ -17,7 +17,7 @@ namespace GatewayService.Services
     {
         private readonly IRequestRepository _repository;
         private readonly ILogger<VerificationRequestService> _logger;
-
+        
         public VerificationRequestService(IRequestRepository repository, ILogger<VerificationRequestService> logger)
         {
             _repository = repository;
@@ -27,20 +27,18 @@ namespace GatewayService.Services
         public async Task<SearchResponse> GetRequestsAsync(SearchRequest request)
         {
             var requestList = await _repository.GetAllPagedListAsync(request);
-
+            
             return GetSearchResponse(requestList, request);
-        }
-
-        public async Task<RequestViewModel?> GetRequestStatusAsync(Guid requestId)
-        {
-            var data = await _repository.FindAsync(requestId);
-            if (data is null) return null;
-            return MapperProfiles.MapRequestModelToRequestViewModel(data);
         }
 
         private static SearchResponse GetSearchResponse(List<Request> items, SearchRequest searchRequest)
         {
-            var requestList = items.Select(MapperProfiles.MapRequestModelToRequestViewModel).ToList();
+            var requestList = new List<RequestViewModel>();
+
+            foreach (var item in items)
+            {
+                requestList.Add(MapperProfiles.MapRequestModelToRequestViewModel(item));
+            }
 
             var response = new SearchResponse
             {

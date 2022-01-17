@@ -28,13 +28,13 @@ namespace GatewayService.Validators
             _niraOptions = niraOptions;
             _verificationOptions = verificationOptions;
 
-            RuleFor(n => n.Nin).Cascade(CascadeMode.Stop)
+            RuleFor(n => n.Nin).Cascade(CascadeMode.StopOnFirstFailure)
                 .NotEmpty()
                 .WithErrorCode("NationalIdVerificationRequest.Nin.NullOrEmpty")
                 .Length(14)
                 .WithErrorCode("NationalIdVerificationRequest.Nin.ExactLengthValidator");
 
-            RuleFor(n => n.CardNumber).Cascade(CascadeMode.Stop)
+            RuleFor(n => n.CardNumber).Cascade(CascadeMode.StopOnFirstFailure)
                 .NotEmpty()
                 .WithErrorCode("NationalIdVerificationRequest.CardNumber.NullOrEmpty")
                 .Length(9)
@@ -79,7 +79,7 @@ namespace GatewayService.Validators
                     .Must((r) => _credentialService.AreConfigCredentialsSet())
                     .WithMessage(
                         $"NIRA Credentials have not been configured in the application. Please contact your system administrator.")
-                    .WithErrorCode( 
+                    .WithErrorCode(
                         "NationalIdVerificationRequest.Base.ConfigCredentialsHaveNotBeenSet");
             });
 

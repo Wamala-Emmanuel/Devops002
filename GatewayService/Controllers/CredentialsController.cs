@@ -77,7 +77,7 @@ namespace GatewayService.Controllers
                 _logger.LogInformation("The current NIRA Credentials for {niraUsername} have been found.", response.Username);
                 return Ok(response);
             }
-            catch (NotFoundException)
+            catch (NotFoundException exc)
             {
                 return NotFound($"NIRA Credentials have not been set.");
             }

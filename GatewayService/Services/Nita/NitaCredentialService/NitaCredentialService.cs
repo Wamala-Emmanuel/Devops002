@@ -41,7 +41,7 @@ namespace GatewayService.Services.Nita.NitaCredentialService
         {
             var credentials = await _nitaCredentialRepository.GetLatestAsync();
 
-            if (credentials is null)
+            if (credentials == null)
             {
                 _logger.LogInformation("Please set the latest NITA credentials.");
 
@@ -55,7 +55,7 @@ namespace GatewayService.Services.Nita.NitaCredentialService
         {
             var latestCredentials = await _nitaCredentialRepository.GetLatestAsync();
 
-            if (latestCredentials is null)
+            if (latestCredentials == null)
             {
                 _logger.LogInformation("Please set the latest NITA credentials.");
 
@@ -90,7 +90,7 @@ namespace GatewayService.Services.Nita.NitaCredentialService
 
             var foundCredential = await _nitaCredentialRepository.FindAsync(id);
 
-            if (foundCredential is null)
+            if (foundCredential == null)
             {
                 _logger.LogWarning("Failed to find NITA credentials with id: {id}.", id);
                 throw new NotFoundException($"Failed to find NITA credentials with id: '{id}'.");

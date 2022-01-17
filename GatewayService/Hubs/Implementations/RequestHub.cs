@@ -31,7 +31,7 @@ namespace GatewayService.Hubs.Implementations
 
             await Clients.All.ReceiveNinRequests(result);
 
-            _logger.LogInformation("Search response with {searchTotalItems} resquests to be sent", result?.Pagination.TotalItems);
+            _logger.LogInformation("Search response with {TotalItems} resquests to be sent", result?.Pagination.TotalItems);
         }
     }
 }
