@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="PluginBase" Version="1.0.2" />
+    <PackageReference Include="PluginBase" Version="4.0.0" />
   </ItemGroup>
 
 </Project>

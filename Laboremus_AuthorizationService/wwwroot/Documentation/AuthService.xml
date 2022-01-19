@@ -188,13 +188,14 @@
             This controller handles everything to do with users
             </summary>
         </member>
-        <member name="M:Laboremus_AuthorizationService.Controllers.UsersController.#ctor(Microsoft.AspNetCore.Identity.UserManager{Laboremus_AuthorizationService.Models.ApplicationUser},Microsoft.Extensions.Logging.ILogger{Laboremus_AuthorizationService.Controllers.UsersController},Microsoft.AspNetCore.Mvc.Infrastructure.IActionContextAccessor,Laboremus_AuthorizationService.Services.ExportService.IExportService)">
+        <member name="M:Laboremus_AuthorizationService.Controllers.UsersController.#ctor(Microsoft.AspNetCore.Identity.UserManager{Laboremus_AuthorizationService.Models.ApplicationUser},Microsoft.Extensions.Logging.ILogger{Laboremus_AuthorizationService.Controllers.UsersController},Microsoft.AspNetCore.Mvc.Infrastructure.IActionContextAccessor,Laboremus_AuthorizationService.Services.ExportService.IExportService,Laboremus_AuthorizationService.Services.EmailSender.IEmailSender)">
             <summary>
             </summary>
             <param name="userManager"></param>
             <param name="logger"></param>
             <param name="actionContextAccessor"></param>
             <param name="exportService"></param>
+            <param name="emailSender"></param>
         </member>
         <member name="M:Laboremus_AuthorizationService.Controllers.UsersController.Create(Laboremus_AuthorizationService.Models.NewUserViewModel)">
             <summary>
@@ -203,11 +204,25 @@
             <param name="model"></param>
             <returns></returns>
         </member>
+        <member name="M:Laboremus_AuthorizationService.Controllers.UsersController.ForgotPasswordAsync(Laboremus_AuthorizationService.Models.AccountViewModels.ForgotPasswordViewModel)">
+            <summary>
+                Send user reset password link
+            </summary>
+            <param email="email"></param>
+            <returns></returns>
+        </member>
         <member name="M:Laboremus_AuthorizationService.Controllers.UsersController.Read(System.String)">
             <summary>
                 Get details of a user by Id
             </summary>
             <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Laboremus_AuthorizationService.Controllers.UsersController.CheckUserExists(Laboremus_AuthorizationService.Models.UserEmailViewModel)">
+            <summary>
+                Check if user already exists based on email
+            </summary>
+            <param email="email"></param>
             <returns></returns>
         </member>
         <member name="M:Laboremus_AuthorizationService.Controllers.UsersController.Search(Laboremus_AuthorizationService.Models.SearchRequest)">
