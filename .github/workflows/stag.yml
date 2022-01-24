@@ -1,4 +1,4 @@
-name: Stag CI/CD
+name: Staging
 
 env:
   AZURE_WEBAPP_NAME: devops002-staging
