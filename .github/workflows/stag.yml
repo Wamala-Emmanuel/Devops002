@@ -1,7 +1,7 @@
 name: Stag CI/CD
 
 env:
-  AZURE_WEBAPP_NAME: devops002-staging    
+  AZURE_WEBAPP_NAME: devops002    
   AZURE_WEBAPP_PACKAGE_PATH: '.'      
   DOTNET_VERSION: '3.1.x'
   NUGET_URL: https://pkgs.dev.azure.com/laboremus-uganda/LUG/_packaging/LugNuGetFeed/nuget/v3/index.json
@@ -13,7 +13,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     environment:
-        name: 'Staging'
+        name: 'Production'
 
     steps:
       - uses: actions/checkout@v2
@@ -42,13 +42,13 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
     environment:
-        name: 'Staging'
+        name: 'Production'
           
     steps:
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
         with:
-          name: .net-app
+          name: AuthAPI-Staging
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
@@ -57,3 +57,4 @@ jobs:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+          slot-name: 'staging'
