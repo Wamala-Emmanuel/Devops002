@@ -1,4 +1,4 @@
-name: CI
+name: Prod CI/CD
 
 env:
   AZURE_WEBAPP_NAME: devops002    
