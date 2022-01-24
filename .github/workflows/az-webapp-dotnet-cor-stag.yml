@@ -7,6 +7,9 @@ env:
   NUGET_URL: https://pkgs.dev.azure.com/laboremus-uganda/LUG/_packaging/LugNuGetFeed/nuget/v3/index.json
 
 on:
+  push:
+    branches:
+      - "develop"
   workflow_dispatch:
 
 jobs:
