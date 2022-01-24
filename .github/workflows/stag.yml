@@ -1,7 +1,7 @@
 name: Stag CI/CD
 
 env:
-  AZURE_WEBAPP_NAME: devops002    
+  AZURE_WEBAPP_NAME: devops002-staging
   AZURE_WEBAPP_PACKAGE_PATH: '.'      
   DOTNET_VERSION: '3.1.x'
   NUGET_URL: https://pkgs.dev.azure.com/laboremus-uganda/LUG/_packaging/LugNuGetFeed/nuget/v3/index.json
