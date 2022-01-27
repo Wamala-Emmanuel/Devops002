@@ -38,23 +38,22 @@ jobs:
               echo "Removed ${FILE}"
            fi
          done
-         ls
           
-#       - name: .Net build
-#         run: dotnet build --configuration Release
+      - name: .Net build
+        run: dotnet build --configuration Release
 
-#       - name: dotnet publish
-#         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+      - name: dotnet publish
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
           
-#       - name: Download artifact from build job
-#         uses: actions/download-artifact@v2
-#         with:
-#           name: Auth-${{ env.CLIENTENV }}
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v2
+        with:
+          name: Auth-${{ env.CLIENTENV }}
 
-#       - name: Deploy to Azure Web App
-#         id: deploy-to-webapp
-#         uses: azure/webapps-deploy@v2
-#         with:
-#           app-name: ${{ env.AZURE_WEBAPP_NAME }}
-#           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-#           package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
