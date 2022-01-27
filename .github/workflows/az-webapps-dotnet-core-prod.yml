@@ -29,17 +29,16 @@ jobs:
           
       - name: Clean appsettings
         run: |
-          cd Laboremus_AuthorizationService
-          ls
-#          cd Laboremus_AuthorizationService
-#          for FILE in $(find . -iname 'appsettings*' -type f); do
-#            if [[ "$FILE" = "./appsettings.json" || "$FILE" = "./appsettings.${{ env.CLIENTENV }}.json" ]]; then
-#              continue
-#             else
-#               rm $FILE
-#               echo "Removed ${FILE}"
-#            fi
-#          done
+         cd Laboremus_AuthorizationService
+         for FILE in $(find . -iname 'appsettings*' -type f); do
+           if [[ "$FILE" = "./appsettings.json" || "$FILE" = "./appsettings.${{ env.CLIENTENV }}.json" ]]; then
+             continue
+            else
+              rm $FILE
+              echo "Removed ${FILE}"
+           fi
+         done
+         ls
           
 #       - name: .Net build
 #         run: dotnet build --configuration Release
