@@ -39,18 +39,17 @@ jobs:
           name: Auth-${{ env.CLIENTENV }}
           path: ${{env.DOTNET_ROOT}}/myapp
           
-      - name: Clean appsettings
-        run: |
-          cd ${{env.DOTNET_ROOT}}/myapp
-          ENV=Client
-          for FILE in $(find . -iname 'appsettings*' -type f); do
-              if [[ "$FILE" = "./appsettings.json" || "$FILE" = "./appsettings.${{ env.CLIENTENV }}.json" ]]; then
-                  continue
-              else
-                  rm $FILE
-                  echo "Removed ${FILE}"
-              fi
-          done
+#       - name: Clean appsettings
+#         run: |
+#           cd ${{env.DOTNET_ROOT}}/myapp
+#           for FILE in $(find . -iname 'appsettings*' -type f); do
+#               if [[ "$FILE" = "./appsettings.json" || "$FILE" = "./appsettings.${{ env.CLIENTENV }}.json" ]]; then
+#                   continue
+#               else
+#                   rm $FILE
+#                   echo "Removed ${FILE}"
+#               fi
+#           done
           
   deploy:
     runs-on: ubuntu-latest
