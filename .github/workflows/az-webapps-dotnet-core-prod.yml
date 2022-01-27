@@ -5,7 +5,7 @@ env:
   AZURE_WEBAPP_PACKAGE_PATH: '.'      
   DOTNET_VERSION: '3.1.x'
   NUGET_URL: https://pkgs.dev.azure.com/laboremus-uganda/LUG/_packaging/LugNuGetFeed/nuget/v3/index.json
-  CLIENTENV: EquityProd
+  CLIENTENV: 'EquityProd'
 
 on:
   workflow_dispatch:
@@ -36,7 +36,7 @@ jobs:
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
         with:
-          name: .net-app
+          name: Auth-${{ env.CLIENTENV }}
           path: ${{env.DOTNET_ROOT}}/myapp
           
       - name: Clean appsettings
@@ -62,7 +62,7 @@ jobs:
       - name: Download artifact from build job
         uses: actions/download-artifact@v2
         with:
-          name: .net-app
+          name: Auth-${{ env.CLIENTENV }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
