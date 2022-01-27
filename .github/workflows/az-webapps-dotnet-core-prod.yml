@@ -38,6 +38,8 @@ jobs:
               echo "Removed ${FILE}"
            fi
          done
+         ls
+         cd ..
           
       - name: .Net build
         run: dotnet build --configuration Release
