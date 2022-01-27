@@ -44,7 +44,7 @@ jobs:
           cd ${{env.DOTNET_ROOT}}/myapp
           ENV=Client
           for FILE in $(find . -iname 'appsettings*' -type f); do
-              if [[ "$FILE" = "./appsettings.json" || "$FILE" = "./appsettings.${env.CLIENTENV}.json" ]]; then
+              if [[ "$FILE" = "./appsettings.json" || "$FILE" = "./appsettings.${{ env.CLIENTENV }}.json" ]]; then
                   continue
               else
                   rm $FILE
