@@ -27,20 +27,6 @@ jobs:
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.NUGET_TOKEN }}
           
-#       - name: Clean appsettings
-#         run: |
-#          cd Laboremus_AuthorizationService
-#          for FILE in $(find . -iname 'appsettings*' -type f); do
-#            if [[ "$FILE" = "./appsettings.json" || "$FILE" = "./appsettings.${{ env.CLIENTENV }}.json" ]]; then
-#              continue
-#             else
-#               rm $FILE
-#               echo "Removed ${FILE}"
-#            fi
-#          done
-#          ls
-#          cd ..
-          
       - name: .Net build
         run: dotnet build --configuration Release
 
