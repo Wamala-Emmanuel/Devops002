@@ -29,52 +29,27 @@ jobs:
           
       - name: Clean appsettings
         run: |
-           cd ${{env.DOTNET_ROOT}}/Laboremus_AuthorizationService
-           for FILE in $(find . -iname 'appsettings*' -type f); do
-               if [[ "$FILE" = "./appsettings.json" || "$FILE" = "./appsettings.${{ env.CLIENTENV }}.json" ]]; then
-                   continue
-               else
-                   rm $FILE
-                   echo "Removed ${FILE}"
-               fi
-           done
+          pwd
+#          cd ${{env.DOTNET_ROOT}}/Laboremus_AuthorizationService
+#          for FILE in $(find . -iname 'appsettings*' -type f); do
+#            if [[ "$FILE" = "./appsettings.json" || "$FILE" = "./appsettings.${{ env.CLIENTENV }}.json" ]]; then
+#              continue
+#             else
+#               rm $FILE
+#               echo "Removed ${FILE}"
+#            fi
+#          done
           
-      - name: .Net build
-        run: dotnet build --configuration Release
+#       - name: .Net build
+#         run: dotnet build --configuration Release
 
-      - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
-
+#       - name: dotnet publish
+#         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
           
-#       - name: Clean appsettings
-#         run: |
-#           cd ${{env.DOTNET_ROOT}}/myapp
-#           for FILE in $(find . -iname 'appsettings*' -type f); do
-#               if [[ "$FILE" = "./appsettings.json" || "$FILE" = "./appsettings.${{ env.CLIENTENV }}.json" ]]; then
-#                   continue
-#               else
-#                   rm $FILE
-#                   echo "Removed ${FILE}"
-#               fi
-#           done
-          
-#   deploy:
-#     runs-on: ubuntu-latest
-#     needs: build
-#     environment:
-#         name: 'Production'
-          
-#     steps:
 #       - name: Download artifact from build job
 #         uses: actions/download-artifact@v2
 #         with:
 #           name: Auth-${{ env.CLIENTENV }}
-
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v2
-        with:
-          name: Auth-${{ env.CLIENTENV }}
-          path: ${{env.DOTNET_ROOT}}/myapp
 
 #       - name: Deploy to Azure Web App
 #         id: deploy-to-webapp
