@@ -5,6 +5,7 @@ env:
   AZURE_WEBAPP_PACKAGE_PATH: '.'      
   DOTNET_VERSION: '3.1.x'
   NUGET_URL: https://pkgs.dev.azure.com/laboremus-uganda/LUG/_packaging/LugNuGetFeed/nuget/v3/index.json
+  CLIENTENV: EquityProd
 
 on:
   workflow_dispatch:
@@ -37,6 +38,19 @@ jobs:
         with:
           name: .net-app
           path: ${{env.DOTNET_ROOT}}/myapp
+          
+      - name: Clean appsettings
+        run: |
+          cd ${{env.DOTNET_ROOT}}/myapp
+          ENV=Client
+          for FILE in $(find . -iname 'appsettings*' -type f); do
+              if [[ "$FILE" = "./appsettings.json" || "$FILE" = "./appsettings.${env.CLIENTENV}.json" ]]; then
+                  continue
+              else
+                  rm $FILE
+                  echo "Removed ${FILE}"
+              fi
+          done
           
   deploy:
     runs-on: ubuntu-latest
