@@ -56,18 +56,15 @@ jobs:
       - name: Clean appsettings
         run: |
          cd ${{env.DOTNET_ROOT}}/myapp
+         for FILE in $(find . -iname 'appsettings*' -type f); do
+           if [[ "$FILE" = "./appsettings.json" || "$FILE" = "./appsettings.${{ env.CLIENTENV }}.json" ]]; then
+             continue
+            else
+              rm $FILE
+              echo "Removed ${FILE}"
+           fi
+         done
          ls
-#         cd Laboremus_AuthorizationService
-#         for FILE in $(find . -iname 'appsettings*' -type f); do
-#           if [[ "$FILE" = "./appsettings.json" || "$FILE" = "./appsettings.${{ env.CLIENTENV }}.json" ]]; then
-#             continue
-#            else
-#              rm $FILE
-#              echo "Removed ${FILE}"
-#           fi
-#         done
-#         ls
-#         cd ..
           
 #       - name: Download artifact from build job
 #         uses: actions/download-artifact@v2
