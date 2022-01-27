@@ -55,8 +55,8 @@ jobs:
           
       - name: Clean appsettings
         run: |
-          pwd
-          ls
+         cd ${{env.DOTNET_ROOT}}/myapp
+         ls
 #         cd Laboremus_AuthorizationService
 #         for FILE in $(find . -iname 'appsettings*' -type f); do
 #           if [[ "$FILE" = "./appsettings.json" || "$FILE" = "./appsettings.${{ env.CLIENTENV }}.json" ]]; then
@@ -69,15 +69,15 @@ jobs:
 #         ls
 #         cd ..
           
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v2
-        with:
-          name: AuthAPI-${{ env.CLIENTENV }}
+#       - name: Download artifact from build job
+#         uses: actions/download-artifact@v2
+#         with:
+#           name: AuthAPI-${{ env.CLIENTENV }}
 
-      - name: Deploy to Azure Web App
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v2
-        with:
-          app-name: ${{ env.AZURE_WEBAPP_NAME }}
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+#       - name: Deploy to Azure Web App
+#         id: deploy-to-webapp
+#         uses: azure/webapps-deploy@v2
+#         with:
+#           app-name: ${{ env.AZURE_WEBAPP_NAME }}
+#           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+#           package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
