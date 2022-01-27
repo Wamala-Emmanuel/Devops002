@@ -29,8 +29,9 @@ jobs:
           
       - name: Clean appsettings
         run: |
+          cd Laboremus_AuthorizationService
           ls
-#          cd ${{env.DOTNET_ROOT}}/Laboremus_AuthorizationService
+#          cd Laboremus_AuthorizationService
 #          for FILE in $(find . -iname 'appsettings*' -type f); do
 #            if [[ "$FILE" = "./appsettings.json" || "$FILE" = "./appsettings.${{ env.CLIENTENV }}.json" ]]; then
 #              continue
