@@ -1,8 +1,8 @@
 name: Production CI/CD
 
 env:
-  AZURE_WEBAPP_NAME: devops002    
-  AZURE_WEBAPP_PACKAGE_PATH: '.'      
+  AZURE_WEBAPP_NAME: devops002
+  AZURE_WEBAPP_PACKAGE_PATH: '.'
   DOTNET_VERSION: '3.1.x'
   NUGET_URL: https://pkgs.dev.azure.com/laboremus-uganda/LUG/_packaging/LugNuGetFeed/nuget/v3/index.json
   CLIENTENV: 'EquityProd'
@@ -29,8 +29,8 @@ jobs:
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.NUGET_TOKEN }}
           
-      - if: ${{ env.DOWNLOAD_ARTIFACT }} == 'yes'
-        name: .Net build
+      - name: .Net build
+        if: ${{ env.DOWNLOAD_ARTIFACT }} == 'yes'
         run: dotnet build --configuration Release
 
 #       - name: dotnet publish
