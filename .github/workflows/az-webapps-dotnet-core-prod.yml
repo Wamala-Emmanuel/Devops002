@@ -30,7 +30,7 @@ jobs:
           NUGET_AUTH_TOKEN: ${{ secrets.NUGET_TOKEN }}
           
       - name: .Net build
-        if: ${{ env.DOWNLOAD_ARTIFACT }} == 'yes'
+        if: ${{ env.DOWNLOAD_ARTIFACT == 'yes' }}
         run: dotnet build --configuration Release
 
 #       - name: dotnet publish
