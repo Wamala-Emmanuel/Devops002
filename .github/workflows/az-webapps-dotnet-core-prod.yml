@@ -29,25 +29,25 @@ jobs:
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.NUGET_TOKEN }}
           
-      - name: .Net build
+      - if: ${{ env.DOWNLOAD_ARTIFACT }} == 'yes'
+        name: .Net build
         run: dotnet build --configuration Release
 
-      - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+#       - name: dotnet publish
+#         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
         
-      - name: Clean appsettings
-        run: |
-         cd ${{env.DOTNET_ROOT}}/myapp
-         for FILE in $(find . -iname 'appsettings*' -type f); do
-           if [[ "$FILE" = "./appsettings.json" || "$FILE" = "./appsettings.${{ env.CLIENTENV }}.json" ]]; then
-             continue
-            else
-              rm $FILE
-              echo "Removed ${FILE}"
-           fi
-         done
-         ls
-         echo ${{ env.DOWNLOAD_ARTIFACT }}
+#       - name: Clean appsettings
+#         run: |
+#          cd ${{env.DOTNET_ROOT}}/myapp
+#          for FILE in $(find . -iname 'appsettings*' -type f); do
+#            if [[ "$FILE" = "./appsettings.json" || "$FILE" = "./appsettings.${{ env.CLIENTENV }}.json" ]]; then
+#              continue
+#             else
+#               rm $FILE
+#               echo "Removed ${FILE}"
+#            fi
+#          done
+#          ls
         
 #       - name: Upload a Build Artifact
 #         uses: actions/upload-artifact@v2.3.1
