@@ -32,6 +32,7 @@ jobs:
       - name: Clean appsettings
         shell: bash
         run: |
+         cd Laboremus_AuthorizationService
          ls
          for FILE in $(find . -iname 'appsettings*' -type f); do
            if [[ "$FILE" = "./appsettings.json" || "$FILE" = "./appsettings.${{ env.CLIENTENV }}.json" ]]; then
