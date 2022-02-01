@@ -58,12 +58,6 @@ jobs:
         with:
           name: AuthAPI-${{ env.CLIENTENV }}
           path: ${{env.DOTNET_ROOT}}/myapp
-          
-      - name: Download artifact from build job
-        if: ${{ env.DOWNLOAD_ARTIFACT == 'yes' }}
-        uses: actions/download-artifact@v2
-        with:
-          name: AuthAPI-${{ env.CLIENTENV }}
 
       - name: Deploy to Azure Web App
         if: ${{ env.DEPLOY == 'yes' }}
@@ -73,5 +67,19 @@ jobs:
           app-name: ${{ env.AZURE_WEBAPP_NAME }}
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
           package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+          
+  artifact:
+    runs-on: ubuntu-latest
+    environment:
+        name: 'Production'
+
+    steps:
+      - uses: actions/checkout@v2          
+                    
+      - name: Download artifact from build job
+        if: ${{ env.DOWNLOAD_ARTIFACT == 'yes' }}
+        uses: actions/download-artifact@v2
+        with:
+          name: AuthAPI-${{ env.CLIENTENV }}
 
           
