@@ -14,7 +14,7 @@ on:
 
 jobs:
   build-and-deploy:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     environment:
         name: 'Production'
 
@@ -29,10 +29,16 @@ jobs:
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.NUGET_TOKEN }}
           
+      - name: .Net build
+        run: dotnet build --configuration Release
+
+      - name: dotnet publish
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp /p:EnvironmentName=${{ env.CLIENTENV }}
+        
       - name: Clean appsettings
         shell: bash
         run: |
-          cd ./Laboremus_AuthorizationService
+          cd ./myapp
           for FILE in $(find . -iname 'appsettings*' -type f); do
             if [[ "$FILE" = "./appsettings.json" || "$FILE" = "./appsettings.${{ env.CLIENTENV }}.json" ]]; then
               continue
@@ -43,12 +49,6 @@ jobs:
           done
           ls
           cd ..
-          
-      - name: .Net build
-        run: dotnet build --configuration Release
-
-      - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp /p:EnvironmentName=${{ env.CLIENTENV }}
         
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v2.3.1
