@@ -37,18 +37,7 @@ jobs:
         
       - name: Clean appsettings
         shell: bash
-        run: |
-          cd myapp
-          for FILE in $(find . -iname 'appsettings*' -type f); do
-            if [[ "$FILE" = "./appsettings.json" || "$FILE" = "./appsettings.${{ env.CLIENTENV }}.json" ]]; then
-              continue
-             else
-               rm $FILE
-               echo "Removed ${FILE}"
-            fi
-          done
-          ls
-          cd ..
+        run: ls
         
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v2.3.1
