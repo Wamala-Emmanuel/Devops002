@@ -38,7 +38,7 @@ jobs:
       - name: Clean appsettings
         shell: pwsh
         run: |
-          cd .\Laboremus_AuthorizationService
+          cd .\myapp
           ls
           $jsonFiles = Get-ChildItem appsettings*json
           foreach ($file in $jsonFiles) {
