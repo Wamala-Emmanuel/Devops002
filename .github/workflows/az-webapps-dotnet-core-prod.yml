@@ -36,10 +36,23 @@ jobs:
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}\myapp /p:EnvironmentName=${{ env.CLIENTENV }}
         
       - name: Clean appsettings
-        shell: bash
+        shell: pwsh
         run: |
           cd .\Laboremus_AuthorizationService
           ls
+          $jsonFiles = Get-ChildItem appsettings*json
+          foreach ($file in $jsonFiles) {
+            if ($file.Name -inotcontains "appsettings.json") {
+              if ($file.Name -inotcontains "appsettings.Config.json") {
+                if ($file.Name -inotcontains "appsettings.${{env.CLIENT}}.json"){
+                  #Write-Host -id 3 -activity "Removing File $($file.Name)" -Status "In progress"
+                  Write-Host "$(Get-Date -f $timeStampFormat) - Removing File $($file.Name): In progress"
+                  Remove-Item $file
+                }
+              }          
+            }   
+          }
+          cd ..
         
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v2.3.1
