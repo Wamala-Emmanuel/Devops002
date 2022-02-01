@@ -29,11 +29,11 @@ jobs:
         env:
           NUGET_AUTH_TOKEN: ${{ secrets.NUGET_TOKEN }}
           
-      - name: .Net build
-        run: dotnet build --configuration Release
-
-      - name: dotnet publish
-        run: dotnet publish --no-restore -c Release -o ${{env.DOTNET_ROOT}}\myapp /p:EnvironmentName=${{ env.CLIENTENV }}
+      - name: .Net build & publish
+        run: |
+          dotnet restore
+          dotnet build --configuration Release
+          dotnet publish --no-restore -c Release -o ${{env.DOTNET_ROOT}}\myapp /p:EnvironmentName=${{ env.CLIENTENV }}
         
       - name: Clean appsettings
         run: |
@@ -51,7 +51,7 @@ jobs:
               }          
             }   
           }
-          cd D:\a\Devops002\Devops002
+
         
       - name: Upload a Build Artifact
         uses: actions/upload-artifact@v2.3.1
