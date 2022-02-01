@@ -38,7 +38,7 @@ jobs:
       - name: Clean appsettings
         shell: pwsh
         run: |
-          cd .\myapp
+          cd ${{env.DOTNET_ROOT}}\myapp
           ls
           $jsonFiles = Get-ChildItem appsettings*json
           foreach ($file in $jsonFiles) {
