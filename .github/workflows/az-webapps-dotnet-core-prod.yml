@@ -6,8 +6,8 @@ env:
   DOTNET_VERSION: '3.1.x'
   NUGET_URL: https://pkgs.dev.azure.com/laboremus-uganda/LUG/_packaging/LugNuGetFeed/nuget/v3/index.json
   CLIENTENV: 'EquityProd'
-  DOWNLOAD_ARTIFACT: 'no'
-  DEPLOY: 'yes'
+  DOWNLOAD_ARTIFACT: 'yes'
+  DEPLOY: 'no'
 
 on:
   workflow_dispatch:
