@@ -33,12 +33,12 @@ jobs:
         run: dotnet build --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp /p:EnvironmentName=${{ env.CLIENTENV }}
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}\myapp /p:EnvironmentName=${{ env.CLIENTENV }}
         
       - name: Clean appsettings
         shell: bash
         run: |
-          cd ./myapp
+          cd myapp
           for FILE in $(find . -iname 'appsettings*' -type f); do
             if [[ "$FILE" = "./appsettings.json" || "$FILE" = "./appsettings.${{ env.CLIENTENV }}.json" ]]; then
               continue
