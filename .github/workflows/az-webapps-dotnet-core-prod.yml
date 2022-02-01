@@ -33,9 +33,45 @@ jobs:
         run: dotnet build --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}\myapp /p:EnvironmentName=${{ env.CLIENTENV }}
+        run: dotnet publish --no-restore -c Release -o ${{env.DOTNET_ROOT}}\myapp /p:EnvironmentName=${{ env.CLIENTENV }}
         
       - name: Clean appsettings
-        shell: pwsh
         run: |
-          pwd
+          cd ${{env.DOTNET_ROOT}}\myapp
+          ls
+          $jsonFiles = Get-ChildItem appsettings*json
+          foreach ($file in $jsonFiles) {
+            if ($file.Name -inotcontains "appsettings.json") {
+              if ($file.Name -inotcontains "appsettings.Config.json") {
+                if ($file.Name -inotcontains "appsettings.${{env.CLIENT}}.json"){
+                  #Write-Host -id 3 -activity "Removing File $($file.Name)" -Status "In progress"
+                  Write-Host "$(Get-Date -f $timeStampFormat) - Removing File $($file.Name): In progress"
+                  Remove-Item $file
+                }
+              }          
+            }   
+          }
+          cd D:\a\Devops002\Devops002
+        
+      - name: Upload a Build Artifact
+        uses: actions/upload-artifact@v2.3.1
+        with:
+          name: AuthAPI-${{ env.CLIENTENV }}
+          path: ${{env.DOTNET_ROOT}}/myapp
+          
+      - name: Download artifact from build job
+        if: ${{ env.DOWNLOAD_ARTIFACT == 'yes' }}
+        uses: actions/download-artifact@v2
+        with:
+          name: AuthAPI-${{ env.CLIENTENV }}
+
+      - name: Deploy to Azure Web App
+        if: ${{ env.DEPLOY == 'yes' }}
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+
+          
