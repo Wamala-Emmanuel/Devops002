@@ -10,7 +10,7 @@ on:
         type: string
       DOWNLOAD_PACKAGE:
         type: string
-      IS_IIS:
+      DEPLOY_IIS:
         type: string
       SITE_NAME:
         type: string
@@ -22,8 +22,7 @@ on:
         type: string
       SERVER_PORT:
         type: string
-      DEPLOY_IIS:
-        type: string
+        
     secrets:
       NUGET_URL_pass:
         required: true
@@ -34,14 +33,6 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
-      
-      - name: test_if
-        if: ${{ inputs.DEPLOY_IIS == true }}
-        run: echo "DEPLOY_IIS"
-        
-      - name: test_if
-        if: ${{ inputs.DEPLOY_IIS == false }}
-        run: echo "NOT_DEPLOY_IIS"
         
       - name: Setup .NET
         uses: actions/setup-dotnet@v1
