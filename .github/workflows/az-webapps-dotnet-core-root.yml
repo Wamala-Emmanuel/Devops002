@@ -77,13 +77,13 @@ jobs:
 #           path: '${{ env.DOTNET_ROOT}}/${{ inputs.PROJECT_ROOT_DIRECTORY }}'
           
 #       - name: Download build artifact
-#         if: ${{ inputs.DOWNLOAD_PACKAGE == 'yes' }}
+#         if: ${{ inputs.DOWNLOAD_PACKAGE == 'Download' }}
 #         uses: actions/download-artifact@v2.1.0
 #         with:
 #           path: '${{ inputs.PROJECT_ROOT_DIRECTORY }}'
           
 #       - name: Deploy to an IIS webserver
-#         if: ${{ inputs.DEPLOY_IIS == 'yes' }}
+#         if: ${{ inputs.DEPLOY_IIS == 'Download' }}
 #         shell: cmd
 #         run: '"C:/Program Files/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -allowUntrusted -source:contentPath="${{ env.DOTNET_ROOT}}/${{ inputs.PROJECT_ROOT_DIRECTORY }}" -dest:contentPath="${{ inputs.SITE_NAME }}",computerName="https://${{ inputs.SERVER_IP }}:${{ inputs.SERVER_PORT }}/msdeploy.axd?site=${{ inputs.SITE_NAME }}",username="${{ inputs.WEBDEPLOY_USER }}",password="${{ inputs.WEBDEPLO_PASSWORD }}",authtype="Basic"'
 
