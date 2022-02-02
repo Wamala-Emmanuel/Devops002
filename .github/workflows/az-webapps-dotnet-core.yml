@@ -58,6 +58,8 @@ on:
         options:
         - no
         - yes
+        - maybe
+        - maybenot
       DEPLOY_IIS:
         type: choice
         description: Should IIS?
@@ -65,6 +67,8 @@ on:
         options:
         - no
         - yes
+        - maybe
+        - maybenot
 jobs:
   RUN_PROCESS:
     uses: ./.github/workflows/az-webapps-dotnet-core-root.yml
