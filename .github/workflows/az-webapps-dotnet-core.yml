@@ -58,17 +58,13 @@ on:
         options:
         - Download
         - Skip
-        - maybe
-        - maybenot
       DEPLOY_IIS:
         type: choice
         description: Should IIS?
         default: 'Skip'
         options:
-        - Download
+        - Deploy
         - Skip
-        - maybe
-        - maybenot
 jobs:
   RUN_PROCESS:
     uses: ./.github/workflows/az-webapps-dotnet-core-root.yml
