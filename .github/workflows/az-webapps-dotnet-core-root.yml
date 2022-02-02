@@ -35,58 +35,54 @@ jobs:
     environment: 'Production'
     steps:
       - uses: actions/checkout@v2
-      
+        
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 2.1.x
+          source-url: ${{ secrets.NUGET_URL_pass }}
+        env:
+          NUGET_AUTH_TOKEN: ${{ secrets.NUGET_TOKEN_pass }}
+          
+      - name: Build and publish
+        run: |
+          dotnet build -c Release
+          dotnet publish --no-build -c Release -o ${{ env.DOTNET_ROOT}}\${{ inputs.PROJECT_ROOT_DIRECTORY }} /p:EnvironmentName=${{ env.CLIENT }}${{ env.CLIENT_ENV }}
+          
+      - name: Clean appsettings
+        run: |
+          cd ${{ env.DOTNET_ROOT}}/${{ inputs.PROJECT_ROOT_DIRECTORY }}
+          $jsonFiles = Get-ChildItem appsettings*json
+          foreach ($file in $jsonFiles) {
+            if ($file.Name -inotcontains "appsettings.json") {
+              if ($file.Name -inotcontains "appsettings.Config.json") {
+                if ($file.Name -inotcontains "appsettings.${{env.CLIENT}}${{env.CLIENT_ENV}}.json"){
+                  #Write-Host -id 3 -activity "Removing File $($file.Name)" -Status "In progress"
+                  Write-Host "$(Get-Date -f $timeStampFormat) - Removing File $($file.Name): In progress"
+                  Remove-Item $file
+                }
+              }     
+            }   
+          }
+          cd ..
+        shell: pwsh
+        
+      - name: Upload build Artifact
+        uses: actions/upload-artifact@v2.3.1
+        with:
+          name: '${{ inputs.PROJECT_ROOT_DIRECTORY }}'
+          path: '${{ env.DOTNET_ROOT}}/${{ inputs.PROJECT_ROOT_DIRECTORY }}'
+          
       - name: Download build artifact
         if: ${{ inputs.DOWNLOAD_PACKAGE == 'Download' }}
-        run: echo "Some Bullshit"
-        
-#       - name: Setup .NET
-#         uses: actions/setup-dotnet@v1
-#         with:
-#           dotnet-version: 2.1.x
-#           source-url: ${{ secrets.NUGET_URL_pass }}
-#         env:
-#           NUGET_AUTH_TOKEN: ${{ secrets.NUGET_TOKEN_pass }}
+        uses: actions/download-artifact@v2.1.0
+        with:
+          path: '${{ inputs.PROJECT_ROOT_DIRECTORY }}'
           
-#       - name: Build and publish
-#         run: |
-#           dotnet build -c Release
-#           dotnet publish --no-build -c Release -o ${{ env.DOTNET_ROOT}}\${{ inputs.PROJECT_ROOT_DIRECTORY }} /p:EnvironmentName=${{ env.CLIENT }}${{ env.CLIENT_ENV }}
-          
-#       - name: Clean appsettings
-#         run: |
-#           cd ${{ env.DOTNET_ROOT}}/${{ inputs.PROJECT_ROOT_DIRECTORY }}
-#           $jsonFiles = Get-ChildItem appsettings*json
-#           foreach ($file in $jsonFiles) {
-#             if ($file.Name -inotcontains "appsettings.json") {
-#               if ($file.Name -inotcontains "appsettings.Config.json") {
-#                 if ($file.Name -inotcontains "appsettings.${{env.CLIENT}}${{env.CLIENT_ENV}}.json"){
-#                   #Write-Host -id 3 -activity "Removing File $($file.Name)" -Status "In progress"
-#                   Write-Host "$(Get-Date -f $timeStampFormat) - Removing File $($file.Name): In progress"
-#                   Remove-Item $file
-#                 }
-#               }     
-#             }   
-#           }
-#           cd ..
-#         shell: pwsh
-        
-#       - name: Upload build Artifact
-#         uses: actions/upload-artifact@v2.3.1
-#         with:
-#           name: '${{ inputs.PROJECT_ROOT_DIRECTORY }}'
-#           path: '${{ env.DOTNET_ROOT}}/${{ inputs.PROJECT_ROOT_DIRECTORY }}'
-          
-#       - name: Download build artifact
-#         if: ${{ inputs.DOWNLOAD_PACKAGE == 'Download' }}
-#         uses: actions/download-artifact@v2.1.0
-#         with:
-#           path: '${{ inputs.PROJECT_ROOT_DIRECTORY }}'
-          
-#       - name: Deploy to an IIS webserver
-#         if: ${{ inputs.DEPLOY_IIS == 'Download' }}
-#         shell: cmd
-#         run: '"C:/Program Files/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -allowUntrusted -source:contentPath="${{ env.DOTNET_ROOT}}/${{ inputs.PROJECT_ROOT_DIRECTORY }}" -dest:contentPath="${{ inputs.SITE_NAME }}",computerName="https://${{ inputs.SERVER_IP }}:${{ inputs.SERVER_PORT }}/msdeploy.axd?site=${{ inputs.SITE_NAME }}",username="${{ inputs.WEBDEPLOY_USER }}",password="${{ inputs.WEBDEPLO_PASSWORD }}",authtype="Basic"'
+      - name: Deploy to an IIS webserver
+        if: ${{ inputs.DEPLOY_IIS == 'Download' }}
+        shell: cmd
+        run: '"C:/Program Files/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -allowUntrusted -source:contentPath="${{ env.DOTNET_ROOT}}/${{ inputs.PROJECT_ROOT_DIRECTORY }}" -dest:contentPath="${{ inputs.SITE_NAME }}",computerName="https://${{ inputs.SERVER_IP }}:${{ inputs.SERVER_PORT }}/msdeploy.axd?site=${{ inputs.SITE_NAME }}",username="${{ inputs.WEBDEPLOY_USER }}",password="${{ inputs.WEBDEPLO_PASSWORD }}",authtype="Basic"'
 
 #       - name: Deploy to Azure Web App
 #         if: ${{ inputs.IS_AZURE == true }}
