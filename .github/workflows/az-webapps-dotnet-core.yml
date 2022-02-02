@@ -78,5 +78,5 @@ jobs:
       SERVER_IP: "154.0.128.234"
       SERVER_PORT: "18172"
     secrets:
-      NUGET_URL_pass: ${{ secrets.NUGET_URL }}
+      NUGET_URL_pass: https://pkgs.dev.azure.com/laboremus-uganda/LUG/_packaging/LugNuGetFeed/nuget/v3/index.json
       NUGET_TOKEN_pass: ${{ secrets.NUGET_TOKEN }}
