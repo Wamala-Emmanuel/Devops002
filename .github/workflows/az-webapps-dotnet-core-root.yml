@@ -44,8 +44,8 @@ jobs:
           
       - name: Build and publish
         run: |
-          dotnet build --configuration Release
-          dotnet publish --no-build -c Release -o ${{ env.DOTNET_ROOT}}\${{ inputs.PROJECT_ROOT_DIRECTORY }}
+          dotnet build -c Release
+          dotnet publish --no-build -c Release -o ${{ env.DOTNET_ROOT}}\${{ inputs.PROJECT_ROOT_DIRECTORY }} /p:EnvironmentName=${{ env.CLIENT }}${{ env.CLIENT_ENV }}
           
       - name: Clean appsettings
         run: |
