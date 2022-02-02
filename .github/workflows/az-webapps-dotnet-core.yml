@@ -1,5 +1,12 @@
 name: CI/CD - Package & IIS deploy
 on:
+  push:
+    branches:
+      - "main"
+      - "develop"
+      - 'release/**'
+      - 'hotfix/**'
+      - 'feature/**'
   workflow_dispatch:
     inputs:
       CLIENT:
