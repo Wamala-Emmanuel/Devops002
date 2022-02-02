@@ -36,8 +36,9 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       
-      - name: Run stuff
-        run: echo "${{ inputs.DEPLOY_IIS == 'yes' }}"
+      - name: Download build artifact
+        if: ${{ inputs.DOWNLOAD_PACKAGE == 'Download' }}
+        run: echo "Some Bullshit"
         
 #       - name: Setup .NET
 #         uses: actions/setup-dotnet@v1
