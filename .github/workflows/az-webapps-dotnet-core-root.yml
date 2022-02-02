@@ -1,4 +1,4 @@
-name: ROOT_WORKFLOW222
+name: ROOT_WORKFLOW
 on:
   workflow_call:
     inputs:
