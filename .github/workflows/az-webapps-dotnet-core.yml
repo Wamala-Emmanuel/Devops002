@@ -1,4 +1,4 @@
-name: DOTNET_WORKFLOW
+name: CI/CD: Package & IIS deploy
 on:
   workflow_dispatch:
     inputs:
