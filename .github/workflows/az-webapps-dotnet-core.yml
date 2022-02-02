@@ -69,8 +69,8 @@ jobs:
     with:
       CLIENT: "${{ github.event.inputs.CLIENT }}"
       CLIENT_ENV: "${{ github.event.inputs.CLIENT_ENV }}"
-      DOWNLOAD_PACKAGE: "${{ github.event.inputs.IS_PACKAGE }}"
-      DEPLOY_IIS: "${{ github.event.inputs.IS_IIS }}"
+      DOWNLOAD_PACKAGE: "${{ github.event.inputs.DOWNLOAD_PACKAGE }}"
+      DEPLOY_IIS: "${{ github.event.inputs.DEPLOY_IIS }}"
       PROJECT_ROOT_DIRECTORY: "Laboremus_auth_api"
       SITE_NAME: "Bou_NationalIdVerification_Auth_Ui_React"
       WEBDEPLOY_USER: "kevin"
