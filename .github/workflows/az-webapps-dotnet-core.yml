@@ -1,0 +1,82 @@
+name: DOTNET_WORKFLOW
+on:
+  workflow_dispatch:
+    inputs:
+      CLIENT:
+        type: choice
+        description: Make a choice and move on
+        options:
+        - Abc
+        - Absa
+        - BankOfAfrica
+        - BankOfIndia
+        - Baroda
+        - Bou
+        - Brac
+        - Cairobank
+        - Development
+        - Dfcu
+        - Dtb
+        - Ecobank
+        - Equity
+        - Exim
+        - FinanceTrust
+        - Finca
+        - GTBank
+        - HousingFinance
+        - Kcb
+        - Laboremus
+        - Mcb
+        - Ncba
+        - OpportunityBank
+        - Orient
+        - Pride
+        - Production
+        - SmileId
+        - Staging
+        - Standbic
+        - StanCart
+        - Streamline
+        - Test
+        - TopFinance
+        - Tropical
+        - Uba
+        - Ugafode
+        - Yako
+      CLIENT_ENV:
+        type: choice
+        description: Select environment
+        options:
+        - Prod
+        - Uat
+        - Test
+        - Sit
+      DOWNLOAD_PACKAGE:
+        type: choice
+        description: Should package?
+        options:
+        - no
+        - yes
+      DEPLOY_IIS:
+        type: choice
+        description: Should IIS?
+        options:
+        - no
+        - yes
+jobs:
+  RUN_PROCESS:
+    uses: ./.github/workflows/az-webapps-dotnet-core-root.yml
+    with:
+      CLIENT: "${{ github.event.inputs.CLIENT }}"
+      CLIENT_ENV: "${{ github.event.inputs.CLIENT_ENV }}"
+      DOWNLOAD_PACKAGE: "${{ github.event.inputs.IS_PACKAGE }}"
+      DEPLOY_IIS: "${{ github.event.inputs.IS_IIS }}"
+      PROJECT_ROOT_DIRECTORY: "Laboremus_auth_api"
+      SITE_NAME: "Bou_NationalIdVerification_Auth_Ui_React"
+      WEBDEPLOY_USER: "kevin"
+      WEBDEPLOY_PASSWORD: "8nJYcxLp4MLhkPQic"
+      SERVER_IP: "154.0.128.234"
+      SERVER_PORT: "18172"
+    secrets:
+      NUGET_URL_pass: ${{ secrets.NUGET_URL }}
+      NUGET_TOKEN_pass: ${{ secrets.NUGET_TOKEN }}
