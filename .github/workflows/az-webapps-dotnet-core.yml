@@ -56,8 +56,8 @@ on:
         description: Should package?
         default: 'no'
         options:
-        - no
-        - yes
+        - Download
+        - Skip
         - maybe
         - maybenot
       DEPLOY_IIS:
@@ -65,8 +65,8 @@ on:
         description: Should IIS?
         default: 'no'
         options:
-        - no
-        - yes
+        - Download
+        - Skip
         - maybe
         - maybenot
 jobs:
