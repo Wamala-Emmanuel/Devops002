@@ -54,12 +54,14 @@ on:
       DOWNLOAD_PACKAGE:
         type: choice
         description: Should package?
+        default: 'no'
         options:
         - no
         - yes
       DEPLOY_IIS:
         type: choice
         description: Should IIS?
+        default: 'no'
         options:
         - no
         - yes
