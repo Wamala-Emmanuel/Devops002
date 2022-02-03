@@ -1,12 +1,5 @@
 name: CI/CD - Package & IIS deploy
 on:
-  push:
-    branches:
-      - "main"
-      - "develop"
-      - 'release/**'
-      - 'hotfix/**'
-      - 'feature/**'
   workflow_dispatch:
     inputs:
       CLIENT:
@@ -74,7 +67,7 @@ on:
         - Skip
 jobs:
   RUN_PROCESS:
-    uses: ./.github/workflows/az-webapps-dotnet-core-root.yml
+    uses: ./.github/workflows/package-iis-dotnet-core-root.yml
     with:
       CLIENT: "${{ github.event.inputs.CLIENT }}"
       CLIENT_ENV: "${{ github.event.inputs.CLIENT_ENV }}"
