@@ -1,0 +1,79 @@
+name: Root workflow
+
+env:
+  NUGET_URL: https://pkgs.dev.azure.com/laboremus-uganda/LUG/_packaging/LugNuGetFeed/nuget/v3/index.json
+  DOTNET_VERSION: 2.1.x
+  WEBDEPLOY_USER: 'kevin'
+  SERVER_IP: '154.0.128.234'
+  SERVER_PORT: '18172'
+  SITE_NAME: 'Bou_NationalIdVerification_Auth_Ui_React'
+  PROJECT_ROOT_DIRECTORY: "Laboremus_auth_api"
+
+on:
+  workflow_call:
+    inputs:
+      CLIENT:
+        type: string
+      CLIENT_ENV:
+        type: string
+      DOWNLOAD_PACKAGE:
+        type: string
+      DEPLOY_IIS:
+        type: string
+      SITE_NAME:
+        type: string
+        
+jobs:
+  Build-Package-IIS_Deploy:
+    runs-on: windows-latest
+    environment: 'Production'
+    steps:
+      - uses: actions/checkout@v2
+        
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+          source-url: ${{ env.NUGET_URL }}
+        env:
+          NUGET_AUTH_TOKEN: ${{ secrets.NUGET_TOKEN }}
+          
+      - name: Build and publish
+        run: |
+          dotnet build -c Release
+          dotnet publish --no-build -c Release -o ${{ env.DOTNET_ROOT}}\${{ env.PROJECT_ROOT_DIRECTORY }} /p:EnvironmentName=${{ inputs.CLIENT }}${{ inputs.CLIENT_ENV }}
+          
+      - name: Clean appsettings
+        run: |
+          cd ${{ env.DOTNET_ROOT}}/${{ env.PROJECT_ROOT_DIRECTORY }}
+          $jsonFiles = Get-ChildItem appsettings*json
+          foreach ($file in $jsonFiles) {
+            if ($file.Name -inotcontains "appsettings.json") {
+              if ($file.Name -inotcontains "appsettings.Config.json") {
+                if ($file.Name -inotcontains "appsettings.${{inputs.CLIENT}}${{inputs.CLIENT_ENV}}.json"){
+                  #Write-Host -id 3 -activity "Removing File $($file.Name)" -Status "In progress"
+                  Write-Host "$(Get-Date -f $timeStampFormat) - Removing File $($file.Name): In progress"
+                  Remove-Item $file
+                }
+              }     
+            }   
+          }
+          cd ..
+        shell: pwsh
+        
+      - name: Upload build Artifact
+        uses: actions/upload-artifact@v2.3.1
+        with:
+          name: '${{ env.PROJECT_ROOT_DIRECTORY }}'
+          path: '${{ env.DOTNET_ROOT}}/${{ env.PROJECT_ROOT_DIRECTORY }}'
+          
+      - name: Download build artifact
+        if: ${{ inputs.DOWNLOAD_PACKAGE == 'Download' }}
+        uses: actions/download-artifact@v2.1.0
+        with:
+          path: '${{ env.PROJECT_ROOT_DIRECTORY }}'
+          
+      - name: Deploy to an IIS webserver
+        if: ${{ inputs.DEPLOY_IIS == 'Deploy' }}
+        shell: cmd
+        run: '"C:/Program Files/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -allowUntrusted -source:contentPath="${{ env.DOTNET_ROOT}}/${{ env.PROJECT_ROOT_DIRECTORY }}" -dest:contentPath="${{ env.SITE_NAME }}",computerName="https://${{ env.SERVER_IP }}:${{ env.SERVER_PORT }}/msdeploy.axd?site=${{ env.SITE_NAME }}",username="${{ env.WEBDEPLOY_USER }}",password="${{ secrets.WEBDEPLOY_PASSWORD }}",authtype="Basic"'
