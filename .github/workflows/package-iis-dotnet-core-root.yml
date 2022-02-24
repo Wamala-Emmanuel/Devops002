@@ -7,7 +7,7 @@ env:
   SERVER_IP: '154.0.128.234'
   SERVER_PORT: '18172'
   SITE_NAME: 'Bou_NationalIdVerification_Auth_Ui_React'
-  PROJECT_ROOT_DIRECTORY: "Laboremus_auth_api"
+  
 
 on:
   workflow_call:
@@ -21,6 +21,8 @@ on:
       DEPLOY_IIS:
         type: string
       SITE_NAME:
+        type: string
+      PROJECT_ROOT_DIRECTORY:
         type: string
         
 jobs:
@@ -41,11 +43,11 @@ jobs:
       - name: Build and publish
         run: |
           dotnet build -c Release
-          dotnet publish --no-build -c Release -o ${{ env.DOTNET_ROOT}}\${{ env.PROJECT_ROOT_DIRECTORY }} /p:EnvironmentName=${{ inputs.CLIENT }}${{ inputs.CLIENT_ENV }}
+          dotnet publish --no-build -c Release -o ${{ env.DOTNET_ROOT}}\${{ inputs.PROJECT_ROOT_DIRECTORY }} /p:EnvironmentName=${{ inputs.CLIENT }}${{ inputs.CLIENT_ENV }}
           
       - name: Clean appsettings
         run: |
-          cd ${{ env.DOTNET_ROOT}}/${{ env.PROJECT_ROOT_DIRECTORY }}
+          cd ${{ env.DOTNET_ROOT}}/${{ inputs.PROJECT_ROOT_DIRECTORY }}
           $jsonFiles = Get-ChildItem appsettings*json
           foreach ($file in $jsonFiles) {
             if ($file.Name -inotcontains "appsettings.json") {
@@ -64,8 +66,8 @@ jobs:
       - name: Upload build Artifact
         uses: actions/upload-artifact@v2.3.1
         with:
-          name: '${{ env.PROJECT_ROOT_DIRECTORY }}'
-          path: '${{ env.DOTNET_ROOT}}/${{ env.PROJECT_ROOT_DIRECTORY }}'
+          name: '${{ inputs.PROJECT_ROOT_DIRECTORY }}'
+          path: '${{ env.DOTNET_ROOT}}/${{ inputs.PROJECT_ROOT_DIRECTORY }}'
           
       - name: Download build artifact
         if: ${{ inputs.DOWNLOAD_PACKAGE == 'Download' }}
@@ -76,4 +78,4 @@ jobs:
       - name: Deploy to an IIS webserver
         if: ${{ inputs.DEPLOY_IIS == 'Deploy' }}
         shell: cmd
-        run: '"C:/Program Files/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -allowUntrusted -source:contentPath="${{ env.DOTNET_ROOT}}/${{ env.PROJECT_ROOT_DIRECTORY }}" -dest:contentPath="${{ env.SITE_NAME }}",computerName="https://${{ env.SERVER_IP }}:${{ env.SERVER_PORT }}/msdeploy.axd?site=${{ env.SITE_NAME }}",username="${{ env.WEBDEPLOY_USER }}",password="${{ secrets.WEBDEPLOY_PASSWORD }}",authtype="Basic"'
+        run: '"C:/Program Files/IIS/Microsoft Web Deploy V3/msdeploy.exe" -verb:sync -allowUntrusted -source:contentPath="${{ env.DOTNET_ROOT}}/${{ inputs.PROJECT_ROOT_DIRECTORY }}" -dest:contentPath="${{ env.SITE_NAME }}",computerName="https://${{ env.SERVER_IP }}:${{ env.SERVER_PORT }}/msdeploy.axd?site=${{ env.SITE_NAME }}",username="${{ env.WEBDEPLOY_USER }}",password="${{ secrets.WEBDEPLOY_PASSWORD }}",authtype="Basic"'
