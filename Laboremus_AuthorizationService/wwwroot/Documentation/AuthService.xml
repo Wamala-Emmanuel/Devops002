@@ -1179,6 +1179,7 @@
             Client Service Constructor
             </summary>
             <param name="repository"></param>
+            <param name="mapper"></param>
         </member>
         <member name="T:Laboremus_AuthorizationService.Services.Clients.Claims.IClientClaimService">
             <summary>

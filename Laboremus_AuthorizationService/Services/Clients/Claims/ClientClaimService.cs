@@ -18,6 +18,7 @@ namespace Laboremus_AuthorizationService.Services.Clients.Claims
         /// Client Service Constructor
         /// </summary>
         /// <param name="repository"></param>
+        /// <param name="mapper"></param>
         public ClientClaimService(IGenericRepository<ClientClaim> repository, IMapper mapper) : base(repository, mapper)
         {
             _repository = repository;

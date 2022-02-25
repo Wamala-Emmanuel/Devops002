@@ -2,21 +2,21 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <UserSecretsId>aspnet-AuthService-2D6E0ABA-0525-4D49-9860-F4B0539B782B</UserSecretsId>
-    <Version>1.0.50</Version>
+    <Version>1.0.52</Version>
     <Company>Laboremus Uganda</Company>
     <Copyright>Laboremus Uganda</Copyright>
     <Authors>Wilson Kiggundu, Keith Ssewannonda, Timothy Kassasa, Evelyne Namwoyo, Benjamin Lutaaya, Charles Kibuuka</Authors>
     <PackageReleaseNotes>
-      Bank of Uganda Auth API release 1.0.49
-      - This version contains an update of the laboremus email library
+      Bank of Uganda Auth API release 1.0.53
+      - Add ecobank production configuration
 </PackageReleaseNotes>
-    <PackageTags>1.0.40</PackageTags>
+    <PackageTags>1.0.52; C#; .NET CORE</PackageTags>
     <Description>The auth service API exposes a RESTful API to allow the financial institution to perform the following actions:
 - API resource creation
 - Client creation
 - User creation</Description>
-    <AssemblyVersion>1.0.50.0</AssemblyVersion>
-    <FileVersion>1.0.50.0</FileVersion>
+    <AssemblyVersion>1.0.53.0</AssemblyVersion>
+    <FileVersion>1.0.53.0</FileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DocumentationFile>wwwroot\Documentation\AuthService.xml</DocumentationFile>
