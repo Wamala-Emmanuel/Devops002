@@ -1,0 +1,79 @@
+name: Prod/Uat-all (Manual)
+
+on:
+  workflow_dispatch:
+    inputs:
+      CLIENT:
+        type: choice
+        description: Select Client
+        options:
+        - Abc
+        - Absa
+        - BankOfAfrica
+        - BankOfIndia
+        - Baroda
+        - Bou
+        - Brac
+        - Cairobank
+        - Development
+        - Dfcu
+        - Dtb
+        - Ecobank
+        - Equity
+        - Exim
+        - FinanceTrust
+        - Finca
+        - GTBank
+        - HousingFinance
+        - Kcb
+        - Laboremus
+        - Mcb
+        - Ncba
+        - OpportunityBank
+        - Orient
+        - Pride
+        - Production
+        - SmileId
+        - Staging
+        - Standbic
+        - StanChart
+        - Streamline
+        - Test
+        - TopFinance
+        - Tropical
+        - Uba
+        - Ugafode
+        - Yako
+      CLIENT_ENV:
+        type: choice
+        description: Select environment
+        options:
+        - Prod
+        - Uat
+        - Test
+        - Staging
+      DOWNLOAD_PACKAGE:
+        type: boolean
+        description: Package?
+      DEPLOY_IIS:
+        type: boolean
+        description: Deploy to IIS?
+jobs:
+  RUN_PROCESS:
+    uses: LaboremusUg/Reusable_Work_Flows/.github/workflows/aspnetcore_root_manual.yml@main
+    with:
+      DOTNET_VERSION: "3.1.x"
+      CLIENT: "${{ github.event.inputs.CLIENT }}"
+      CLIENT_ENV: "${{ github.event.inputs.CLIENT_ENV }}"
+      DOWNLOAD_PACKAGE: "${{ github.event.inputs.DOWNLOAD_PACKAGE }}"
+      DEPLOY_IIS: "${{ github.event.inputs.DEPLOY_IIS }}"
+      PROJECT_ROOT_DIRECTORY: "Bou_NationalIdVerification_Auth_Api_${{ github.event.inputs.CLIENT_ENV }}"
+      SITE_NAME: "Bou_NationalIdVerificationAuth_Auth_Api_${{ github.event.inputs.CLIENT_ENV }}"
+      PROJECT_NAME: "Laboremus_AuthorizationService"
+    secrets:
+      NUGET_URL: ${{ secrets.NUGET_URL }}
+      NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
+      WEBDEPLOY_PASSWORD: ${{ secrets.WEBDEPLOY_PASSWORD }}
+      WEBDEPLOY_USER: ${{ secrets.WEBDEPLOY_USER }}
+      SERVER_IP: ${{ secrets.SERVER_IP }}
+      SERVER_PORT: ${{ secrets.SERVER_PORT }}
