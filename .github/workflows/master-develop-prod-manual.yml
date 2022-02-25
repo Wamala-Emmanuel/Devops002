@@ -60,7 +60,7 @@ on:
         description: Deploy to IIS?
 jobs:
   RUN_PROCESS:
-    uses: LaboremusUg/Reusable_Work_Flows/.github/workflows/aspnetcore_root_manual.yml@main
+    uses: ./.github/workflows/reusable.yml
     with:
       DOTNET_VERSION: "3.1.x"
       CLIENT: "${{ github.event.inputs.CLIENT }}"
